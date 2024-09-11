@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "font-awesome/css/font-awesome.min.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -17,7 +19,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/token/', formData);
+      const response = await axios.post('http://localhost:8000/api/token/', formData);
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       console.log('Login successful:', response.data);

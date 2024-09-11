@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
-import TaskApp from './TaskApp'; 
+import TaskApp from './task_app/TaskApp'; 
 
 const App = () => {
   return (
@@ -9,7 +9,7 @@ const App = () => {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<TaskApp />} /> 
+        <Route path="/tasks" element={<TaskApp />} /> 
       </Routes>
     </Router>
   );

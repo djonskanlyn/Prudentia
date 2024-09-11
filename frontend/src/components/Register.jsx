@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "font-awesome/css/font-awesome.min.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/register/', formData);
+      const response = await axios.post('http://localhost:8000/api/register/', formData);
       console.log('Registration successful:', response.data);
     } catch (error) {
       console.error('Registration error:', error);
