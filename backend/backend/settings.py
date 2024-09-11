@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authapp',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
