@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function Register() {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -20,6 +23,7 @@ function Register() {
     try {
       const response = await axios.post('http://localhost:8000/api/register/', formData);
       console.log('Registration successful:', response.data);
+      navigate('/login');
     } catch (error) {
       console.error('Registration error:', error);
     }
@@ -68,6 +72,10 @@ function Register() {
           </div>
 
           <button type="submit" className="btn btn-outline-secondary">Register</button>
+
+          <div className="mt-3 text-center">
+            <p>Already have an account? <Link to="/login">Login</Link></p>
+          </div>
         </form>
       </div>
     </div>

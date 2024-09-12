@@ -19,7 +19,6 @@ import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
 const App = () => {
-
   
   return (
     <Router>
@@ -29,18 +28,18 @@ const App = () => {
         <nav className="navbar-top d-flex align-items-center justify-content-between bg-light">
           <span className="website-header">Prudentia</span>
           <div className="top-navbar-icons d-flex">
-            <Link to="/logout" className="nav-icon" data-tooltip="Logout"><FaSignOutAlt size={24} /></Link>
-            <Link to="#" className="nav-icon" data-tooltip="Theme"><FaAdjust size={24} /></Link>
+                <Link to="/logout" className="nav-icon" data-tooltip="Logout"><FaSignOutAlt size={24} /></Link>
+                <Link to="#" className="nav-icon" data-tooltip="Theme"><FaAdjust size={24} /></Link>
           </div>
         </nav>
 
         {/* left navbar */}
         <nav className="navbar-left d-flex flex-column bg-light">
-          <div className="nav-icon hidden-placeholder"></div>
-          <Link to="/home" className="nav-icon" data-tooltip="Home"><FaHome size={24} /></Link>
-          <Link to="/returns" className="nav-icon" data-tooltip="Returns"><FaList size={24} /></Link>
-          <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"><FaMagnifyingGlass size={24} /></Link>
-          <Link to="/breach-reviews" className="nav-icon" data-tooltip="Breach Reviews"><FaBell size={24} /></Link>
+              <div className="nav-icon hidden-placeholder"></div>
+              <Link to="/home" className="nav-icon" data-tooltip="Home"><FaHome size={24} /></Link>
+              <Link to="/returns" className="nav-icon" data-tooltip="Returns"><FaList size={24} /></Link>
+              <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"><FaMagnifyingGlass size={24} /></Link>
+              <Link to="/breach-reviews" className="nav-icon" data-tooltip="Breach Reviews"><FaBell size={24} /></Link>
         </nav>
 
         {/* right navbar */}
@@ -48,9 +47,9 @@ const App = () => {
 
         {/* bottom navbar */}
         <nav className="navbar-bottom d-flex bg-light">
-          <Link to="/profile" className="nav-icon" data-tooltip="Profile"><FaUser size={24} /></Link>
-          <Link to="/info" className="nav-icon" data-tooltip="Info"><FaInfoCircle size={24} /></Link>
-          <Link to="/contact" className="nav-icon" data-tooltip="Contact"><FaEnvelope size={24} /></Link>
+              <Link to="/profile" className="nav-icon" data-tooltip="Profile"><FaUser size={24} /></Link>
+              <Link to="/info" className="nav-icon" data-tooltip="Info"><FaInfoCircle size={24} /></Link>
+              <Link to="/contact" className="nav-icon" data-tooltip="Contact"><FaEnvelope size={24} /></Link>
         </nav>
 
         {/* content container */}

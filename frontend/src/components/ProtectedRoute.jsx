@@ -1,20 +1,30 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
+  const [loading, setLoading] = useState(true);  // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the access token exists in localStorage
-    const accessToken = localStorage.getItem('access_token');
+    const checkAuth = async () => {
+      const accessToken = localStorage.getItem('access_token');
 
-    // Redirect to login if the token doesn't exist
-    if (!accessToken) {
-      navigate('/login');
-    }
+      // Simulate an async authentication check
+      if (!accessToken) {
+        navigate('/login');  // Redirect to login if no token
+      } else {
+        setLoading(false);  // Stop loading once authenticated
+      }
+    };
+
+    checkAuth();  // Check authentication
   }, [navigate]);
 
-  return children;  // If the user is authenticated, render the children components
+  if (loading) {
+    return <div>Loading...</div>;  // Display loading indicator while checking authentication
+  }
+
+  return children;  // If authenticated, render the children components
 };
 
 export default ProtectedRoute;
