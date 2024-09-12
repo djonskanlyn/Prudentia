@@ -1,10 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, } from 'react-router-dom';
 import { FaHome, FaUser, FaSignOutAlt, FaAdjust, FaList, FaBell, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import ProtectedRoute from './components/ProtectedRoute';
 import Login from './components/Login';
+import Logout from './components/Logout';
 import Register from './components/Register';
 import TaskApp from './task_app/TaskApp';
 
@@ -17,6 +19,8 @@ import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
 const App = () => {
+
+  
   return (
     <Router>
       <div id="app-container" className="vh-100 d-flex flex-column">
@@ -57,15 +61,16 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Login />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
                   <Route path="/register" element={<Register />} />
-                  <Route path="/tasks" element={<TaskApp />} />
-                  <Route path="/home" element={<HomePage />} />
-                  <Route path="/returns" element={<ReturnsPage />} />
-                  <Route path="/pr-reviews" element={<PrReviewsPage />} />
-                  <Route path="/breach-reviews" element={<BreachReviewsPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/info" element={<InfoPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/tasks" element={<ProtectedRoute> <TaskApp /> </ProtectedRoute>} />
+                  <Route path="/home" element={<ProtectedRoute> <HomePage /> </ProtectedRoute>} />
+                  <Route path="/returns" element={<ProtectedRoute> <ReturnsPage /> </ProtectedRoute>} />
+                  <Route path="/pr-reviews" element={<ProtectedRoute> <PrReviewsPage /> </ProtectedRoute>} />
+                  <Route path="/breach-reviews" element={<ProtectedRoute> <BreachReviewsPage /> </ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
+                  <Route path="/info" element={<ProtectedRoute> <InfoPage /> </ProtectedRoute>} />
+                  <Route path="/contact" element={<ProtectedRoute> <ContactPage /> </ProtectedRoute>} />
                 </Routes>
               </div>
             </div>

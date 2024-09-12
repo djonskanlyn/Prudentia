@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function Login() {
     password: '',
   });
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -22,6 +25,7 @@ function Login() {
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       console.log('Login successful:', response.data);
+      navigate('/home'); // Redirect to home page on successful login
     } catch (error) {
       setError('Invalid username or password');
       console.error('Login error:', error);
