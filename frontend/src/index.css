@@ -1,17 +1,138 @@
-/* this code sets the background of the app to a colourful gradient */
+/* Reset browser defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
 #root {
-    background: radial-gradient(50% 123.47% at 50% 50%, #00ff94 0%, #720059 100%),
-      linear-gradient(121.28deg, #669600 0%, #ff0000 100%), linear-gradient(
-        360deg,
-        #0029ff 0%,
-        #8fff00 100%
-      ), radial-gradient(100% 164.72% at 100% 100%, #6100ff 0%, #00ff57 100%),
-      radial-gradient(100% 148.07% at 0% 0%, #fff500 0%, #51d500 100%);
-    background-blend-mode: screen, color-dodge, overlay, difference, normal;
-    height: 100vh;
-  }
-  
-  /* this code makes use of the new CSS ":has()" selector to put a line through completed tasks if the list item has a checked checkbox */
-  li.list-group-item div:has(:checked) {
-    text-decoration: line-through;
-  }
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar custom styles */
+.navbar-left, .navbar-right, .navbar-top, .navbar-bottom {
+  background-color: #F8F8F8;
+}
+
+.navbar-left, .navbar-right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 10;
+}
+
+.navbar-left {
+  left: 0;
+}
+
+.navbar-right {
+  right: 0;
+}
+
+.navbar-top, .navbar-bottom {
+  height: 60px;
+  z-index: 10;
+}
+
+.navbar-top {
+  position: fixed;
+  top: 0;
+  left: 60px; /* Allow for the left navbar */
+  right: 60px; /* Allow for the right navbar */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.nav-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6E6E6E;
+  text-decoration: none;
+  position: relative;
+}
+
+.nav-icon:hover {
+  background-color: #E1E1E1;
+}
+
+.hidden-placeholder {
+  visibility: hidden;
+  width: 60px;
+  height: 60px;
+}
+
+.website-header {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #6E6E6E;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Tooltip styles */
+.nav-icon::after {
+  opacity: 0;
+  transition: opacity 0.3s;
+  position: absolute;
+  background-color: #6E6E6E;
+  color: #FFFFFF;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 9999;
+}
+
+.navbar-left .nav-icon:hover::after {
+  content: attr(data-tooltip);
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+.navbar-top .nav-icon:hover::after {
+  content: attr(data-tooltip);
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+}
+
+.navbar-right .nav-icon:hover::after {
+  content: attr(data-tooltip);
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+.navbar-bottom .nav-icon:hover::after {
+  content: attr(data-tooltip);
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+}
