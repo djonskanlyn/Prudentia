@@ -30,15 +30,15 @@ function Register() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="bg-light p-4 rounded shadow" style={{ width: '400px' }}>
+    <div className="outer-placeholder">
+      <div className="login-register-box" style={{ width: '400px' }}>
         <form onSubmit={handleSubmit}>
           <h2 className="text-center mb-4">Register</h2>
 
           <div className="form-group mb-3">
             <input
               type="text"
-              className="form-control"
+              className="style-form-control"
               id="username"
               name="username"
               placeholder="Username"
@@ -50,7 +50,7 @@ function Register() {
           <div className="form-group mb-3">
             <input
               type="email"
-              className="form-control"
+              className="style-form-control"
               id="email"
               name="email"
               placeholder="Email"
@@ -62,7 +62,7 @@ function Register() {
           <div className="form-group mb-3">
             <input
               type="password"
-              className="form-control"
+              className="style-form-control"
               id="password"
               name="password"
               placeholder="Password"
@@ -71,7 +71,7 @@ function Register() {
             />
           </div>
 
-          <button type="submit" className="btn btn-outline-secondary">Register</button>
+          <button type="submit" className="style-button">Register</button>
 
           <div className="mt-3 text-center">
             <p>Already have an account? <Link to="/login">Login</Link></p>

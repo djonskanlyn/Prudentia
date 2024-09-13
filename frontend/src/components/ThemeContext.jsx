@@ -1,5 +1,4 @@
-// ThemeContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
 // Create the Theme Context
 const ThemeContext = createContext();
@@ -9,11 +8,19 @@ export const useTheme = () => useContext(ThemeContext);
 
 // ThemeProvider component to wrap the app
 export const ThemeProvider = ({ children }) => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  // Initialize theme state with value from localStorage, or default to false (light theme)
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('isDarkTheme');
+    return savedTheme === 'true'; // Return true if 'true' is stored, otherwise false
+  });
 
   // Function to toggle between light and dark themes
   const toggleTheme = () => {
-    setIsDarkTheme((prevTheme) => !prevTheme);
+    setIsDarkTheme((prevTheme) => {
+      const newTheme = !prevTheme;
+      localStorage.setItem('isDarkTheme', newTheme); // Save the new theme to localStorage
+      return newTheme;
+    });
   };
 
   // Define the theme class for ag-Grid

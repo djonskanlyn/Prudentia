@@ -13,6 +13,7 @@ import Logout from './components/Logout';
 import Register from './components/Register';
 import { ThemeProvider, useTheme } from './components/ThemeContext'; // Correctly import ThemeContext
 import ThemeToggleIcon from './components/ThemeToggleIcon';
+import NotFound from './components/NotFound'; // Custom 404 component
 
 import TaskApp from './task_app/TaskApp';
 import HomePage from './pages/HomePage';
@@ -42,6 +43,7 @@ const ContentContainer = () => {
         <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
         <Route path="/info" element={<ProtectedRoute> <InfoPage /> </ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute> <ContactPage /> </ProtectedRoute>} />
+        <Route path="*" element={<NotFound />} /> {/* Catch-all for invalid URLs */}
       </Routes>
     </div>
   );

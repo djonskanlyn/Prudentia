@@ -34,8 +34,8 @@ function Login() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="bg-light p-4 rounded shadow" style={{ width: '400px' }}>
+    <div className="outer-placeholder">
+      <div className="login-register-box" style={{ width: '400px' }}>
         <form onSubmit={handleSubmit}>
           <h2 className="text-center mb-4">Login</h2>
           {error && <div className="alert alert-danger text-center">{error}</div>}
@@ -43,7 +43,7 @@ function Login() {
           <div className="form-group mb-3">
             <input
               type="text"
-              className="form-control"
+              className="style-form-control"
               id="username"
               name="username"
               placeholder="Username"
@@ -55,7 +55,7 @@ function Login() {
           <div className="form-group mb-3">
             <input
               type="password"
-              className="form-control"
+              className="style-form-control"
               id="password"
               name="password"
               placeholder="Password"
@@ -64,7 +64,7 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="btn btn-outline-secondary">Login</button>
+          <button type="submit" className="style-button">Login</button>
 
           <div className="mt-3 text-center">
             <p>Don't have an account? <Link to="/register">Register</Link></p>

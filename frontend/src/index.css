@@ -19,6 +19,7 @@ html, body {
   padding: 0;
   height: 100%;
   font-family: 'Arial', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #app-container {
@@ -241,4 +242,90 @@ html, body {
   flex-direction: column;
   height: 100%;
   overflow-x: auto;
+}
+
+
+/* ########################### */
+/* Temp Placeholder Formatting */
+/* ########################### */
+
+.outer-placeholder {
+  display: flex; /* equivalent to d-flex */
+  justify-content: center; /* equivalent to justify-content-center */
+  align-items: center; /* equivalent to align-items-center */
+  height: 100vh; /* equivalent to vh-100 (100% of viewport height) */
+}
+
+.temp-inner-placeholder {
+  background-color: #F8F8F8;
+  padding: 1.5rem; /* equivalent to p-4 */
+  border-radius: 0.25rem; /* equivalent to rounded */
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.15); /* equivalent to shadow */
+  text-align: center;
+}
+
+.dark-theme .temp-inner-placeholder {
+  background-color: #212629;
+}
+
+.login-register-box {
+  background-color: #F8F8F8;
+  padding: 1.5rem; /* equivalent to p-4 */
+  border-radius: 0.25rem; /* equivalent to rounded */
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.15); /* equivalent to shadow */
+  text-align: center;
+}
+
+.dark-theme .login-register-box {
+  background-color: #212629;
+}
+
+.style-button {
+  display: inline-block;
+  font-weight: 400;
+  color: #FFFFFF;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: #6E6E6E;
+  border: 1px solid #6E6E6E;
+  padding: 0.375rem 0.75rem; /* Padding equivalent to Bootstrap */
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem; /* Rounded corners */
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.style-button:hover {
+  background-color: #5a6268; /* Hover state for secondary button */
+  border-color: #545b62;
+  color: #FFFFFF; /* Ensure text remains white on hover */
+}
+
+.style-form-control {
+  display: block;
+  width: 100%; /* Full width of the parent */
+  height: calc(1.5em + 0.75rem + 2px); /* Height based on font size and padding */
+  padding: 0.375rem 0.75rem; /* Padding inside the input */
+  font-size: 1rem; /* Base font size */
+  font-weight: 400; /* Normal font weight */
+  line-height: 1.5; /* Line height */
+  color: #6E6E6E; /* Text color */
+  background-color: #FFFFFF; /* Background color */
+  background-clip: padding-box; /* Ensure background covers the padding area */
+  border: 1px solid #6E6E6E; /* Border color */
+  border-radius: 0.25rem; /* Slightly rounded corners */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth transition for border and shadow on focus */
+}
+
+.style-form-control:focus {
+  color: #6E6E6E;
+  background-color: #FFFFFF;
+  border-color: #80bdff; /* Blue border on focus */
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Blue shadow on focus */
+}
+
+.dark-theme .style-form-control {
+  background-color: #181d20;
 }
