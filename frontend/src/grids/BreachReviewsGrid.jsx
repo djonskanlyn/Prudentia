@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
+import { useTheme } from '../components/ThemeContext';
 
 const BreachReviewsGrid = () => {
+  const { themeClass } = useTheme();
   const [rowData, setRowData] = useState([]);
 
-  const gridOptions = {
-    columnDefs: [
+  const columnDefs = [
       { field: 'id', filter: true, floatingFilter: true },
       { field: 'institutionId', filter: true, floatingFilter: true },
       { field: 'institution', filter: true, floatingFilter: true },
@@ -14,10 +15,7 @@ const BreachReviewsGrid = () => {
       { field: 'isCurrent', filter: true, floatingFilter: true },
       { field: 'version', filter: true, floatingFilter: true },
       { field: 'submittedBy', filter: true, floatingFilter: true },
-    ],
-    pagination: true,
-    paginationPageSize: 500,
-  };
+    ]
 
   useEffect(() => {
     const data = [
@@ -53,12 +51,11 @@ const BreachReviewsGrid = () => {
   }, []);
 
   return (
-    <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
+    <div className={themeClass} style={{ height: '100%', width: '100%' }}>
       <AgGridReact
         rowData={rowData}
-        columnDefs={gridOptions.columnDefs}
-        pagination={gridOptions.pagination}
-        paginationPageSize={gridOptions.paginationPageSize}
+        columnDefs={columnDefs}
+        pagination={true}
       />
     </div>
   );

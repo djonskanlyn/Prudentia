@@ -1,13 +1,11 @@
-/* Reset browser defaults */
+/* ######### */
+/* index.css */
+/* ######### */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  font-family: 'Arial', sans-serif;
 }
 
 #root {
@@ -16,17 +14,68 @@ html, body {
   flex-direction: column;
 }
 
-/* Navbar custom styles */
-.navbar-left, .navbar-right, .navbar-top, .navbar-bottom {
-  background-color: #F8F8F8;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
 }
 
-.navbar-left, .navbar-right {
+#app-container {
+  background-color: #FFFFFF;
+  color: #181d20;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-area {
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* ################# */
+/* Navbar Formatting */
+/* ################# */
+
+.navbar-left, 
+.navbar-right, 
+.navbar-top, 
+.navbar-bottom {
   position: fixed;
+  background-color: #F8F8F8;
+  color: #6E6E6E;
+  display: flex;
+  z-index: 10;
+}
+
+.navbar-left, 
+.navbar-right {
   top: 0;
   bottom: 0;
   width: 60px;
-  z-index: 10;
+  flex-direction: column;
+}
+
+.navbar-top, 
+.navbar-bottom {
+  left: 60px;
+  right: 60px;
+  height: 60px;
+  align-items: center;
+}
+
+.navbar-top {
+  top: 0;
+  justify-content: space-between;
+}
+
+.navbar-bottom {
+  bottom: 0;
+  justify-content: flex-start;
 }
 
 .navbar-left {
@@ -35,31 +84,6 @@ html, body {
 
 .navbar-right {
   right: 0;
-}
-
-.navbar-top, .navbar-bottom {
-  height: 60px;
-  z-index: 10;
-}
-
-.navbar-top {
-  position: fixed;
-  top: 0;
-  left: 60px;
-  right: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 60px;
-  right: 60px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center
 }
 
 .nav-icon {
@@ -77,12 +101,23 @@ html, body {
   background-color: #E1E1E1;
 }
 
+/* This deals with the theme switch icon/button */
+.nav-icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+/* keeps the icon space, but it's invisible */
 .hidden-placeholder {
   visibility: hidden;
   width: 60px;
   height: 60px;
 }
 
+/* stylling for "PRUDENTIA" */
 .website-header {
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 30px;
@@ -92,17 +127,24 @@ html, body {
   text-transform: uppercase;
 }
 
+/* stylling for copyright statement */
+.website-footer {
+  font-size: 15px;
+  color: #6E6E6E;
+  margin-left: auto;
+}
+
+/* keeps the icons in order */
 .top-bottom-navbar-icons {
   display: flex;
 }
 
-.website-footer {
-  font-size: 15px;
-  color: #6E6E6E;
-  margin-left: auto; /* Ensures it aligns to the right */
-}
 
-/* Tooltip styles */
+/* ################################# */
+/* Tooltips for icons in the navbars */
+/* ################################# */
+
+/* tooltip default hidden state */
 .nav-icon::after {
   opacity: 0;
   transition: opacity 0.3s;
@@ -113,7 +155,7 @@ html, body {
   border-radius: 5px;
   white-space: nowrap;
   font-size: 12px;
-  z-index: 9999;
+  z-index: 9999; /* Ensure tooltips are on top of other content */
 }
 
 .navbar-left .nav-icon:hover::after {
@@ -148,48 +190,55 @@ html, body {
   opacity: 1;
 }
 
-/* Adjust the content area to respect the fixed width of the left and right navbars */
-.content-area {
-  margin-left: 80px;  /* Space for the left navbar */
-  margin-right: 80px; /* Space for the right navbar */
-  margin-top: 80px;  /* Top navbar height */
-  margin-bottom: 80px; /* Bottom navbar height */
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 160px); /* Full width minus left and right navbar */
-  height: calc(100% - 160px); /* Full height minus top and bottom navbar */
-  background-color: #ffffff;
-  color: #343a40;
-  overflow: hidden;
+
+/* ##################### */
+/* Dark Theme Formatting */
+/* ##################### */
+
+/* Dark Theme */
+.dark-theme {
+  background-color: #181d20;
+  color: #FFFFFF;
 }
 
-#app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+/* Ensure dark theme applies to navbars */
+.dark-theme .navbar-left,
+.dark-theme .navbar-right,
+.dark-theme .navbar-top,
+.dark-theme .navbar-bottom {
+  background-color: #212629;
 }
+
+/* Ensure dark theme applies to nav-icons on hover */
+.dark-theme .nav-icon:hover {
+  background-color: #101518;
+}
+
+
+/* #################### */
+/* Grid Page Formatting */
+/* #################### */
 
 .grid-page {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure the h1 is at the top */
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Prevent scrollbars */
+  overflow: hidden;
 }
 
 .grid-page h1 {
-  margin-bottom: 10px; /* Give the heading space from the grid */
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
 }
 
-/* Grid container should allow horizontal scrolling */
 .grid-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow-x: auto; /* Allow horizontal scrolling */
+  overflow-x: auto;
 }
