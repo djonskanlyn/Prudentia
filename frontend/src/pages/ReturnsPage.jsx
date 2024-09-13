@@ -1,11 +1,12 @@
 import React from 'react';
+import ReturnsGrid from '../grids/ReturnsGrid';
 
 const ReturnsPage = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="bg-light p-4 rounded shadow" style={{ textAlign: 'center' }}>
-        <h1>Returns Page</h1>
-        <p>Welcome to the returns page!</p>
+    <div className="grid-page">
+      <h1>Returns</h1>
+      <div className="grid-container">
+        <ReturnsGrid />
       </div>
     </div>
   );
