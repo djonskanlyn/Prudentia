@@ -33,17 +33,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tasks',
-    'authapp',
+    # Third party apps
     'rest_framework',
     'corsheaders',
     'drf_yasg',
+    # Prudentia apps
+    'tasks',
+    'authapp',
+    'data',
 ]
 
 MIDDLEWARE = [
