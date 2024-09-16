@@ -3,7 +3,8 @@ from .models import (
     FirmDim, TemplateDim, StatusDim, StateDim, ScheduledFact,
     IncomeExpenditureFact, BalanceSheetFact, DepositsInvestmentsFact,
     CreditRiskFact, OutstandingLoanMaturityFact, AdvancedLoanMaturityFact,
-    OutstandingLoanCategoryFact, AdvancedLoanCategoryFact
+    OutstandingLoanCategoryFact, AdvancedLoanCategoryFact,
+    DepositsInvestmentsDim, CreditRiskDim, LoanMaturityDim, LoanCategoryDim
 )
 
 class FirmDimSerializer(serializers.ModelSerializer):
@@ -24,6 +25,26 @@ class StatusDimSerializer(serializers.ModelSerializer):
 class StateDimSerializer(serializers.ModelSerializer):
     class Meta:
         model = StateDim
+        fields = '__all__'
+
+class DepositsInvestmentsDimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepositsInvestmentsDim
+        fields = '__all__'
+
+class CreditRiskDimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditRiskDim
+        fields = '__all__'
+
+class LoanMaturityDimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoanMaturityDim
+        fields = '__all__'
+
+class LoanCategoryDimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoanCategoryDim
         fields = '__all__'
 
 class ScheduledFactSerializer(serializers.ModelSerializer):

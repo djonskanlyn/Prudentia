@@ -3,13 +3,15 @@ from .models import (
     FirmDim, TemplateDim, StatusDim, StateDim, ScheduledFact,
     IncomeExpenditureFact, BalanceSheetFact, DepositsInvestmentsFact,
     CreditRiskFact, OutstandingLoanMaturityFact, AdvancedLoanMaturityFact,
-    OutstandingLoanCategoryFact, AdvancedLoanCategoryFact
+    OutstandingLoanCategoryFact, AdvancedLoanCategoryFact, DepositsInvestmentsDim,
+    CreditRiskDim, LoanMaturityDim, LoanCategoryDim
 )
 from .serializers import (
     FirmDimSerializer, TemplateDimSerializer, StatusDimSerializer, StateDimSerializer, ScheduledFactSerializer,
     IncomeExpenditureFactSerializer, BalanceSheetFactSerializer, DepositsInvestmentsFactSerializer,
     CreditRiskFactSerializer, OutstandingLoanMaturityFactSerializer, AdvancedLoanMaturityFactSerializer,
-    OutstandingLoanCategoryFactSerializer, AdvancedLoanCategoryFactSerializer
+    OutstandingLoanCategoryFactSerializer, AdvancedLoanCategoryFactSerializer, DepositsInvestmentsDimSerializer,
+    LoanCategoryDimSerializer, LoanMaturityDimSerializer, CreditRiskDimSerializer
 )
 
 class FirmDimViewSet(viewsets.ModelViewSet):
@@ -27,6 +29,22 @@ class StatusDimViewSet(viewsets.ModelViewSet):
 class StateDimViewSet(viewsets.ModelViewSet):
     queryset = StateDim.objects.all()
     serializer_class = StateDimSerializer
+
+class DepositsInvestmentsDimViewSet(viewsets.ModelViewSet):
+    queryset = DepositsInvestmentsDim.objects.all()
+    serializer_class = DepositsInvestmentsDimSerializer
+
+class CreditRiskDimViewSet(viewsets.ModelViewSet):
+    queryset = CreditRiskDim.objects.all()
+    serializer_class = CreditRiskDimSerializer
+
+class LoanCategoryDimViewSet(viewsets.ModelViewSet):
+    queryset = LoanCategoryDim.objects.all()
+    serializer_class = LoanCategoryDimSerializer
+
+class LoanMaturityDimViewSet(viewsets.ModelViewSet):
+    queryset = LoanMaturityDim.objects.all()
+    serializer_class = LoanMaturityDimSerializer
 
 class ScheduledFactViewSet(viewsets.ModelViewSet):
     queryset = ScheduledFact.objects.all()
