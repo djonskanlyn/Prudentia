@@ -92,4 +92,19 @@ class AdvancedLoanCategoryFactSerializer(serializers.ModelSerializer):
         model = AdvancedLoanCategoryFact
         fields = '__all__'
 
+# custom views
+
+class ReturnsListSerializer(serializers.ModelSerializer):
+    firmName = serializers.CharField(source='firm.name', read_only=True)
+    templateName = serializers.CharField(source='template.name', read_only=True)
+    statusName = serializers.CharField(source='status.name', read_only=True)
+    stateName = serializers.CharField(source='state.name', read_only=True)
+
+    class Meta:
+        model = ScheduledFact
+        fields = [
+            'id', 'firm', 'firmName', 'templateName', 'reportingDate', 'quarterRef', 'dueDate', 'stateName', 'statusName', 'versionRef', 'firstSubmittedDatetime', 'lastSubmittedDatetime', 
+        ]
+
+
 

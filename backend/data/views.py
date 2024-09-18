@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from .models import (
     FirmDim, TemplateDim, StatusDim, StateDim, ScheduledFact,
     IncomeExpenditureFact, BalanceSheetFact, DepositsInvestmentsFact,
@@ -11,7 +11,8 @@ from .serializers import (
     IncomeExpenditureFactSerializer, BalanceSheetFactSerializer, DepositsInvestmentsFactSerializer,
     CreditRiskFactSerializer, OutstandingLoanMaturityFactSerializer, AdvancedLoanMaturityFactSerializer,
     OutstandingLoanCategoryFactSerializer, AdvancedLoanCategoryFactSerializer, DepositsInvestmentsDimSerializer,
-    LoanCategoryDimSerializer, LoanMaturityDimSerializer, CreditRiskDimSerializer
+    LoanCategoryDimSerializer, LoanMaturityDimSerializer, CreditRiskDimSerializer,
+    ReturnsListSerializer
 )
 
 class FirmDimViewSet(viewsets.ModelViewSet):
@@ -81,3 +82,7 @@ class OutstandingLoanCategoryFactViewSet(viewsets.ModelViewSet):
 class AdvancedLoanCategoryFactViewSet(viewsets.ModelViewSet):
     queryset = AdvancedLoanCategoryFact.objects.all()
     serializer_class = AdvancedLoanCategoryFactSerializer
+
+class ReturnsListView(generics.ListAPIView):
+    queryset = ScheduledFact.objects.select_related('firm', 'template', 'status', 'state')
+    serializer_class = ReturnsListSerializer

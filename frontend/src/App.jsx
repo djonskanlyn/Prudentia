@@ -79,7 +79,7 @@ const AppContent = () => {
       <nav className="navbar-left">
         <div className="nav-icon hidden-placeholder"></div>
         <Link to="/home" className="nav-icon" data-tooltip="Home"> <FaHome size={24} /> </Link>
-        <Link to="/returns" className="nav-icon" data-tooltip="Returns"> <FaList size={24} /> </Link>
+        <Link to="/returns" className="nav-icon" data-tooltip="Returns List"> <FaList size={24} /> </Link>
         <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"> <FaMagnifyingGlass size={24} /> </Link>
         <Link to="/breach-reviews" className="nav-icon" data-tooltip="Breach Reviews"> <FaBell size={24} /> </Link>
       </nav>
