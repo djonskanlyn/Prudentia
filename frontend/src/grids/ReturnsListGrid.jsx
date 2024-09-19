@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
 
-const ReturnsGrid = () => {
+const ReturnsListGrid = () => {
   const { themeClass } = useTheme();
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
@@ -96,7 +96,7 @@ const ReturnsGrid = () => {
   );
 };
 
-export default ReturnsGrid;
+export default ReturnsListGrid;
 
 
 

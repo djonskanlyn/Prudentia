@@ -1,15 +1,15 @@
 import React from 'react';
-import ReturnsGrid from '../grids/ReturnsGrid';
+import ReturnsListGrid from '../grids/ReturnsListGrid';
 
-const ReturnsPage = () => {
+const ReturnsListPage = () => {
   return (
     <div className="grid-page">
       <h1>Returns List</h1>
       <div className="grid-container">
-        <ReturnsGrid />
+        <ReturnsListGrid />
       </div>
     </div>
   );
 };
 
-export default ReturnsPage;
+export default ReturnsListPage;

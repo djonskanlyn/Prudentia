@@ -15,19 +15,19 @@ import { ThemeProvider, useTheme } from './components/ThemeContext'; // Correctl
 import ThemeToggleIcon from './components/ThemeToggleIcon';
 import NotFound from './components/NotFound'; // Custom 404 component
 
-import TaskApp from './task_app/TaskApp';
 import HomePage from './pages/HomePage';
-import ReturnsPage from './pages/ReturnsPage';
+import ReturnsListPage from './pages/ReturnsListPage';
+import ReturnsDetailPage from './pages/ReturnsDetailPage';
 import PrReviewsPage from './pages/PrReviewsPage';
-import BreachReviewsPage from './pages/BreachReviewsPage';
 import ProfilePage from './pages/ProfilePage';
 import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
+import TaskApp from './task_app/TaskApp';
+
 // ContentContainer handles the routes and theme class for the content area
 const ContentContainer = () => {
-  const { isDarkTheme } = useTheme(); // Access the current theme state
-
+  const { isDarkTheme } = useTheme();
   return (
     <div className={`content-area ${isDarkTheme ? 'dark-theme' : ''}`}>
       <Routes>
@@ -37,9 +37,9 @@ const ContentContainer = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/tasks" element={<ProtectedRoute> <TaskApp /> </ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute> <HomePage /> </ProtectedRoute>} />
-        <Route path="/returns" element={<ProtectedRoute> <ReturnsPage /> </ProtectedRoute>} />
+        <Route path="/returns-list" element={<ProtectedRoute> <ReturnsListPage /> </ProtectedRoute>} />
+        <Route path="/returns-detail" element={<ProtectedRoute> <ReturnsDetailPage /> </ProtectedRoute>} />
         <Route path="/pr-reviews" element={<ProtectedRoute> <PrReviewsPage /> </ProtectedRoute>} />
-        <Route path="/breach-reviews" element={<ProtectedRoute> <BreachReviewsPage /> </ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
         <Route path="/info" element={<ProtectedRoute> <InfoPage /> </ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute> <ContactPage /> </ProtectedRoute>} />
@@ -49,9 +49,8 @@ const ContentContainer = () => {
   );
 };
 
-// AppContent is now responsible for applying theme to the main app container
 const AppContent = () => {
-  const { isDarkTheme } = useTheme(); // Access the theme state here
+  const { isDarkTheme } = useTheme();
 
   return (
     <div id="app-container" className={`${isDarkTheme ? 'dark-theme' : ''}`}>
@@ -79,9 +78,9 @@ const AppContent = () => {
       <nav className="navbar-left">
         <div className="nav-icon hidden-placeholder"></div>
         <Link to="/home" className="nav-icon" data-tooltip="Home"> <FaHome size={24} /> </Link>
-        <Link to="/returns" className="nav-icon" data-tooltip="Returns List"> <FaList size={24} /> </Link>
-        <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"> <FaMagnifyingGlass size={24} /> </Link>
-        <Link to="/breach-reviews" className="nav-icon" data-tooltip="Breach Reviews"> <FaBell size={24} /> </Link>
+        <Link to="/returns-list" className="nav-icon" data-tooltip="Returns List"> <FaList size={24} /> </Link>
+        <Link to="/returns-detail" className="nav-icon" data-tooltip="Returns Detail"> <FaMagnifyingGlass size={24} /> </Link>
+        <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"> <FaBell size={24} /> </Link>
       </nav>
 
       {/* right navbar */}
@@ -95,12 +94,11 @@ const AppContent = () => {
   );
 };
 
-// App now wraps everything inside ThemeProvider and routes are handled within
 const App = () => {
   return (
-    <ThemeProvider> {/* Ensure ThemeProvider wraps everything */}
+    <ThemeProvider>
       <Router>
-        <AppContent /> {/* All theme-dependent components are inside AppContent */}
+        <AppContent />
       </Router>
     </ThemeProvider>
   );
