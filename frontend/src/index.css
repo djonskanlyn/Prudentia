@@ -438,7 +438,8 @@ html, body {
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  overflow-y: auto; /* Ensure overflow is handled correctly */
+  overflow-x: auto; /* Add horizontal scroll here */
+  overflow-y: auto;
 }
 
 /* Dark Theme Adjustments for Tabs */
@@ -477,3 +478,19 @@ html, body {
   width: 13%; /* Adjust the width for columns 2 to 7 */
 }
 
+.border-top-1 td:nth-child(2) {
+  border-top: 3px solid #6E6E6E !important; /* Add border width and style */
+}
+
+.border-top-2 td:nth-child(3) {
+  border-top: 3px solid #6E6E6E !important; /* Add border width and style */
+}
+
+.border-top-2 td:nth-child(3) {
+  border-top: 3px solid #6E6E6E !important; /* Add border width and style */
+}
+
+.double-bottom-border td:nth-child(4) {
+  border-bottom: 6px double #6E6E6E !important; /* Add border width and style */
+  border-top: 3px solid #6E6E6E !important; /* Add border width and style */
+}
