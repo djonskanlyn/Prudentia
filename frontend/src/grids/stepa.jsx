@@ -1,71 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '../components/ThemeContext'; // Import the custom hook
-import { fetchData } from '../components/FetchData'; // Assuming fetchData is already implemented
+import React from 'react';
+import { useTheme } from '../components/ThemeContext';
 
-const IncomeExpenditureGrid = () => {
-  const { themeClass } = useTheme(); // Access the theme class from context
-  const [dataSource, setDataSource] = useState([]);
-  const [error, setError] = useState(null);
+const table1Data = [
+  { key: '0', dim: '', aaci: 'euro', iess: 'euro', cbd: 'euro', bb: 'euro', oi: 'euro', total: 'euro' },
+  { key: '1', dim: 'Cash equivalents', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '2', dim: 'Under 3 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '3', dim: '3 to 12 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '4', dim: '1 to 5 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '5', dim: '5 to 7 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '6', dim: '7 to 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '7', dim: 'Over 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
+  { key: '8', dim: 'Total', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000', className: 'grey-background' },
+];
 
-  // Function to fetch data from the API using fetchData
-  const fetchIncomeExpenditureData = async () => {
-    try {
-      const data = await fetchData('data/income-expenditure-fact/1/'); // Using the fetchData function
-      // Map the API response to your dataSource format
-      const newDataSource = [
-        { key: '0.1', description: '', amount1: '', amount2: '', amount3: '' },
-        { key: '0.9', description: 'Income', amount1: '', amount2: '', amount3: '', className: 'grey-background' },
-        { key: '1', description: 'Member loan interest', amount1: data.memberLoanInterest.toLocaleString(), amount2: '', amount3: '' },
-        { key: '2', description: 'Other interest income', amount1: data.otherInterestIncome.toLocaleString(), amount2: '', amount3: '' },
-        { key: '3', description: 'Other income', amount1: data.otherIncome.toLocaleString(), amount2: '', amount3: '' },
-        { key: '4', description: 'Total income', amount1: '', amount2: data.totalIncome.toLocaleString(), amount3: '', className: 'border-top-1' },
-        { key: '4.1', description: '', amount1: '', amount2: '', amount3: '' },
-        { key: '4.9', description: 'Total expenditure', amount1: '', amount2: '', amount3: '', className: 'grey-background' },
-        { key: '5', description: 'Employment costs', amount1: data.employmentCosts.toLocaleString(), amount2: '', amount3: '' },
-        { key: '6', description: 'Other management costs', amount1: data.otherManagementCosts.toLocaleString(), amount2: '', amount3: '' },
-        { key: '7', description: 'Depreciation costs', amount1: data.depreciationCosts.toLocaleString(), amount2: '', amount3: '' },
-        { key: '8', description: 'Net member loan impairment', amount1: data.netMemberLoanImpairment.toLocaleString(), amount2: '', amount3: '' },
-        { key: '9', description: 'Total expenditure', amount1: '', amount2: data.totalExpenditure.toLocaleString(), amount3: '', className: 'border-top-1' },
-        { key: '10', description: 'Surplus or deficit', amount1: '', amount2: '', amount3: data.surplusOrDeficit.toLocaleString(), className: 'border-top-2 double-bottom-border' },
-      ];
+const table2Data = [
+  { key: '0', dim: '% table total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
+  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
+];
 
-      setDataSource(newDataSource); // Update the dataSource state with API data
-    } catch (err) {
-      setError('Failed to fetch data');
-    }
-  };
+const table3Data = [
+  { key: '0', dim: '% row total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
+  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
+];
 
-  // Use useEffect to call the API when the component mounts
-  useEffect(() => {
-    fetchIncomeExpenditureData();
-  }, []);
+const table4Data = [
+  { key: '0', dim: '% column total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
+  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
+  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
+];
+
+const InvestmentTable = ({ data }) => {
+  return (
+    <table className="custom-table" style={{ marginBottom: '20px' }}>
+      <thead>
+        <tr>
+          <th style={{ fontWeight: 'bold' }}>DEPOSITS & INVESTMENTS</th>
+          <th style={{ fontWeight: 'bold' }}>Accounts in authorised credit institutions</th>
+          <th style={{ fontWeight: 'bold' }}>Irish and EEA states securities</th>
+          <th style={{ fontWeight: 'bold' }}>Central bank deposits</th>
+          <th style={{ fontWeight: 'bold' }}>Bank bonds</th>
+          <th style={{ fontWeight: 'bold' }}>Other investments</th>
+          <th style={{ fontWeight: 'bold' }}>Total deposits and investments</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((item) => (
+          <tr key={item.key} className={item.className || ''}>
+            <td>{item.dim}</td>
+            <td>{item.aaci}</td>
+            <td>{item.iess}</td>
+            <td>{item.cbd}</td>
+            <td>{item.bb}</td>
+            <td>{item.oi}</td>
+            <td className={item.key !== '0' ? 'grey-background' : ''}>{item.total}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const InvestmentsDepositsGrid = () => {
+  const { themeClass } = useTheme();
 
   return (
-    <div className={`${themeClass} grid-container`} style={{ width: '700px', margin: '0 auto' }}>
-      {error && <div>Error: {error}</div>}
-      <table className="custom-table">
-        <thead>
-          <tr>
-            <th>INCOME & EXPENDITURE</th>
-            <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>euro</th>
-            <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>euro</th>
-            <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>euro</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dataSource.map((item) => (
-            <tr key={item.key} className={item.className || ''}>
-              <td>{item.description}</td>
-              <td>{item.amount1}</td>
-              <td>{item.amount2}</td>
-              <td>{item.amount3}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={`${themeClass} grid-container`} style={{ width: '900px', margin: '0 auto' }}>
+      <InvestmentTable data={table1Data} />
+      <InvestmentTable data={table2Data} />
+      <InvestmentTable data={table3Data} />
+      <InvestmentTable data={table4Data} />
     </div>
   );
 };
 
-export default IncomeExpenditureGrid;
-
+export default InvestmentsDepositsGrid;
