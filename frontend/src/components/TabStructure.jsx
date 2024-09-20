@@ -6,8 +6,7 @@ import IncomeExpenditureGrid from '../grids/IncomeExpenditureGrid';
 import BalanceSheetGrid from '../grids/BalanceSheetGrid';
 import InvestmentsDepositsGrid from '../grids/InvestmentsDepositsGrid';
 import CreditRiskGrid from '../grids/CreditRiskGrid';
-import OutstandingLoansGrid from '../grids/OutstandingLoansGrid';
-import AdvancedLoansGrid from '../grids/AdvancedLoansGrid';
+import LoansAnalysisGrid from '../grids/LoansAnalysisGrid';
 
 const TabStructure = () => {
   const { themeClass } = useTheme();
@@ -51,18 +50,11 @@ const TabStructure = () => {
           Credit Risk Disclosures
         </button>
         <button
-          className={activeTab === 'OutstandingLoans' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('OutstandingLoans')}
+          className={activeTab === 'LoansAnalysis' ? 'active-tab' : ''}
+          onClick={() => handleTabClick('LoansAnalysis')}
           style={{ padding: '10px 20px', margin: '0 10px' }}
         >
-          Outstanding Loans Analysis
-        </button>
-        <button
-          className={activeTab === 'AdvancedLoans' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('AdvancedLoans')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Advanced Loans Analysis
+          Loans Analysis
         </button>
       </div>
 
@@ -72,8 +64,7 @@ const TabStructure = () => {
         {activeTab === 'BalanceSheet' && <BalanceSheetGrid />}
         {activeTab === 'InvestmentsDeposits' && <InvestmentsDepositsGrid />}
         {activeTab === 'CreditRisk' && <CreditRiskGrid />}
-        {activeTab === 'OutstandingLoans' && <OutstandingLoansGrid />}
-        {activeTab === 'AdvancedLoans' && <AdvancedLoansGrid />}
+        {activeTab === 'LoansAnalysis' && <LoansAnalysisGrid />}
       </div>
     </div>
   );

@@ -1,78 +1,130 @@
 import React from 'react';
 import { useTheme } from '../components/ThemeContext';
 
-const table1Data = [
-  { key: '0', dim: '', aaci: 'euro', iess: 'euro', cbd: 'euro', bb: 'euro', oi: 'euro', total: 'euro' },
-  { key: '1', dim: 'Cash equivalents', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '2', dim: 'Under 3 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '3', dim: '3 to 12 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '8', dim: 'Total', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000', className: 'grey-background' },
+const dataSource = [
+  {
+    key: '1', 
+    dim: 'Not impaired', 
+    na: '90,000', 
+    aa: '9,000,000,000',
+    pa: '9,000,000,000',
+    className: 'grey-background'
+  },
+  {
+    key: '1.1', 
+    dim: '',
+    na: '', 
+    aa: '',
+    pa: '', 
+  },
+  {
+    key: '1.9', // Unique identifier for another main row
+    dim: 'Impaired', // Descriptive label for impaired loans
+    na: '', // Empty field for number of loans
+    aa: '', // Empty field for amount of loans
+    pa: '', // Empty field for amount of provisions
+    className: 'grey-background' // Apply background styling for this row
+  },
+  {
+    key: '2', 
+    dim: 'Not past due', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '3', 
+    dim: 'Under 9 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '4', 
+    dim: '10 to 18 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '5', 
+    dim: '19 to 26 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '6', 
+    dim: '27 to 39 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '7', 
+    dim: '40 to 52 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '8', 
+    dim: 'Over 53 wks', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+  },
+  {
+    key: '9', 
+    dim: 'Total impaired', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+    className: 'grey-background'
+  },
+  {
+    key: '9.1', 
+    dim: '', 
+    na: '', 
+    aa: '', 
+    pa: '', 
+  },
+  {
+    key: '10', 
+    dim: 'Total loans', 
+    na: '90,000', 
+    aa: '9,000,000,000', 
+    pa: '9,000,000,000', 
+    className: 'grey-background'
+  }
 ];
 
-const table2Data = [
-  { key: '0', dim: '% table total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
 
-const table3Data = [
-  { key: '0', dim: '% row total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
-
-const table4Data = [
-  { key: '0', dim: '% column total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
-
-const InvestmentTable = ({ data }) => {
+const CreditRiskTable = ({ data }) => {
   return (
-    <table className="custom-table" style={{ marginBottom: '20px' }}>
+    <table className="custom-table" style={{ marginBottom: '20px', width: '100%', tableLayout: 'fixed' }}>
       <thead>
+        {/* First header row */}
         <tr>
-          <th style={{ fontWeight: 'bold' }}>DEPOSITS & INVESTMENTS</th>
-          <th style={{ fontWeight: 'bold' }}>Accounts in authorised credit institutions</th>
-          <th style={{ fontWeight: 'bold' }}>Irish and EEA states securities</th>
-          <th style={{ fontWeight: 'bold' }}>Central bank deposits</th>
-          <th style={{ fontWeight: 'bold' }}>Bank bonds</th>
-          <th style={{ fontWeight: 'bold' }}>Other investments</th>
-          <th style={{ fontWeight: 'bold' }}>Total deposits and investments</th>
+          <th rowSpan="2" style={{ fontWeight: 'bold', width: '25%', textAlign: 'left' }}>CREDIT RISK DISCLOSURES</th>
+          <th colSpan="1" style={{ fontWeight: 'bold', width: '25%', textAlign: 'center' }}>Number of loans</th>
+          <th colSpan="1" style={{ fontWeight: 'bold', width: '25%', textAlign: 'center' }}>Amount of loans</th>
+          <th rowSpan="1" style={{ fontWeight: 'bold', width: '25%', textAlign: 'center' }}>Amount of provisions</th>
+        </tr>
+        {/* Second header row */}
+        <tr>
+          <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>number</th>
+          <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>euro</th>
+          <th style={{ fontWeight: 'normal', whiteSpace: 'nowrap', textAlign: 'center' }}>euro</th>
         </tr>
       </thead>
       <tbody>
         {data.map((item) => (
           <tr key={item.key} className={item.className || ''}>
             <td>{item.dim}</td>
-            <td>{item.aaci}</td>
-            <td>{item.iess}</td>
-            <td>{item.cbd}</td>
-            <td>{item.bb}</td>
-            <td>{item.oi}</td>
-            <td className={item.key !== '0' ? 'grey-background' : ''}>{item.total}</td>
+            <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>{item.na}</td>
+            <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>{item.aa}</td>
+            <td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>{item.pa}</td>
           </tr>
         ))}
       </tbody>
@@ -80,17 +132,14 @@ const InvestmentTable = ({ data }) => {
   );
 };
 
-const InvestmentsDepositsGrid = () => {
+const CreditRiskGrid = () => {
   const { themeClass } = useTheme();
 
   return (
-    <div className={`${themeClass} grid-container`} style={{ width: '900px', margin: '0 auto' }}>
-      <InvestmentTable data={table1Data} />
-      <InvestmentTable data={table2Data} />
-      <InvestmentTable data={table3Data} />
-      <InvestmentTable data={table4Data} />
+    <div className={`${themeClass} grid-container`} style={{ width: '600px', margin: '0 auto' }}>
+      <CreditRiskTable data={dataSource} />
     </div>
   );
 };
 
-export default InvestmentsDepositsGrid;
+export default CreditRiskGrid;
