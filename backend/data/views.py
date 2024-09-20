@@ -127,17 +127,121 @@ class OutstandingLoanMaturityFactViewSet(viewsets.ModelViewSet):
     queryset = OutstandingLoanMaturityFact.objects.all()
     serializer_class = OutstandingLoanMaturityFactSerializer
 
+    # Add Swagger documentation for the query parameter 'returnId'
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'returnId',  # Query parameter name
+            openapi.IN_QUERY,  # Specify that it's in the query string
+            description="Filter by Return ID",  # Description of the parameter
+            type=openapi.TYPE_INTEGER  # The expected data type
+        )
+    ])
+    def list(self, request, *args, **kwargs):
+        queryset = super().get_queryset()
+
+        # Get 'returnId' from the query parameters in the URL
+        return_id = self.request.query_params.get('returnId', None)
+
+        if return_id is not None:
+            try:
+                # Convert 'returnId' to an integer and filter by ForeignKey ID (returnId_id)
+                return_id = int(return_id)
+                queryset = queryset.filter(returnId_id=return_id)
+            except ValueError:
+                # If 'returnId' is not a valid integer, return an empty queryset
+                queryset = queryset.none()
+
+        return Response(self.get_serializer(queryset, many=True).data)
+
 class AdvancedLoanMaturityFactViewSet(viewsets.ModelViewSet):
     queryset = AdvancedLoanMaturityFact.objects.all()
     serializer_class = AdvancedLoanMaturityFactSerializer
+
+    # Add Swagger documentation for the query parameter 'returnId'
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'returnId',  # Query parameter name
+            openapi.IN_QUERY,  # Specify that it's in the query string
+            description="Filter by Return ID",  # Description of the parameter
+            type=openapi.TYPE_INTEGER  # The expected data type
+        )
+    ])
+    def list(self, request, *args, **kwargs):
+        queryset = super().get_queryset()
+
+        # Get 'returnId' from the query parameters in the URL
+        return_id = self.request.query_params.get('returnId', None)
+
+        if return_id is not None:
+            try:
+                # Convert 'returnId' to an integer and filter by ForeignKey ID (returnId_id)
+                return_id = int(return_id)
+                queryset = queryset.filter(returnId_id=return_id)
+            except ValueError:
+                # If 'returnId' is not a valid integer, return an empty queryset
+                queryset = queryset.none()
+
+        return Response(self.get_serializer(queryset, many=True).data)
 
 class OutstandingLoanCategoryFactViewSet(viewsets.ModelViewSet):
     queryset = OutstandingLoanCategoryFact.objects.all()
     serializer_class = OutstandingLoanCategoryFactSerializer
 
+    # Add Swagger documentation for the query parameter 'returnId'
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'returnId',  # Query parameter name
+            openapi.IN_QUERY,  # Specify that it's in the query string
+            description="Filter by Return ID",  # Description of the parameter
+            type=openapi.TYPE_INTEGER  # The expected data type
+        )
+    ])
+    def list(self, request, *args, **kwargs):
+        queryset = super().get_queryset()
+
+        # Get 'returnId' from the query parameters in the URL
+        return_id = self.request.query_params.get('returnId', None)
+
+        if return_id is not None:
+            try:
+                # Convert 'returnId' to an integer and filter by ForeignKey ID (returnId_id)
+                return_id = int(return_id)
+                queryset = queryset.filter(returnId_id=return_id)
+            except ValueError:
+                # If 'returnId' is not a valid integer, return an empty queryset
+                queryset = queryset.none()
+
+        return Response(self.get_serializer(queryset, many=True).data)
+
 class AdvancedLoanCategoryFactViewSet(viewsets.ModelViewSet):
     queryset = AdvancedLoanCategoryFact.objects.all()
     serializer_class = AdvancedLoanCategoryFactSerializer
+
+    # Add Swagger documentation for the query parameter 'returnId'
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'returnId',  # Query parameter name
+            openapi.IN_QUERY,  # Specify that it's in the query string
+            description="Filter by Return ID",  # Description of the parameter
+            type=openapi.TYPE_INTEGER  # The expected data type
+        )
+    ])
+    def list(self, request, *args, **kwargs):
+        queryset = super().get_queryset()
+
+        # Get 'returnId' from the query parameters in the URL
+        return_id = self.request.query_params.get('returnId', None)
+
+        if return_id is not None:
+            try:
+                # Convert 'returnId' to an integer and filter by ForeignKey ID (returnId_id)
+                return_id = int(return_id)
+                queryset = queryset.filter(returnId_id=return_id)
+            except ValueError:
+                # If 'returnId' is not a valid integer, return an empty queryset
+                queryset = queryset.none()
+
+        return Response(self.get_serializer(queryset, many=True).data)
 
 class ReturnsListView(generics.ListAPIView):
     queryset = ScheduledFact.objects.select_related('firm', 'template', 'status', 'state')

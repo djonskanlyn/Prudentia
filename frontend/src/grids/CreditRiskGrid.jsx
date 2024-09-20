@@ -125,7 +125,7 @@ const CreditRiskGrid = () => {
     }
   };
 
-    // Use useEffect to call the API when the component mounts
+  // Use useEffect to call the API when the component mounts
   useEffect(() => {
     fetchDataSource();
   }, []);
