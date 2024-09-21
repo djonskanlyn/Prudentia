@@ -4,19 +4,22 @@ import { fetchData } from '../components/FetchData';
 import { formatData } from '../components/FormatFunctions';
 import { useReturnId } from '../pages/ReturnsDetailPage';
 
-
 const IncomeExpenditureGrid = () => {
   const { themeClass } = useTheme();
   const returnId = useReturnId();  // Get returnId from context
   const [dataSource, setDataSource] = useState([]);
   const [error, setError] = useState(null);
 
+  // Function to fetch and format data
   const fetchDataSource = async () => {
     if (!returnId) return;  // Ensure returnId is available before fetching
 
     try {
+      // Use returnId in the endpoint
       const endpoint = `data/income-expenditure-fact/${returnId}/`;
       const data = await fetchData(endpoint);
+
+      // Format the data using formatData
       const formattedData = formatData(data);
 
       // Construct the table rows based on formatted data
@@ -36,7 +39,7 @@ const IncomeExpenditureGrid = () => {
         { key: '9', description: 'Total expenditure', amount1: '', amount2: formattedData.totalExpenditure, amount3: '', className: 'border-top-1' },
         { key: '10', description: 'Surplus or deficit', amount1: '', amount2: '', amount3: formattedData.surplusOrDeficit, className: 'border-top-2 double-bottom-border' }
       ];
-      setDataSource(dataSource);
+      setDataSource(dataSource); // Update the dataSource state with API data
     } catch (err) {
       setError('Failed to fetch data');
     }
@@ -48,7 +51,7 @@ const IncomeExpenditureGrid = () => {
   }, [returnId]);
 
   const table = (
-    <table id="income-expenditure-table" className="custom-table">
+    <table className="custom-table">
       <thead>
         <tr>
           <th>INCOME & EXPENDITURE</th>

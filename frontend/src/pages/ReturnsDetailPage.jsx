@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import ReturnsFilter from '../components/ReturnsFilter';
 import TabStructure from '../components/TabStructure';
 import { fetchData } from '../components/FetchData';
+import ExportToPdf from '../components/ExportToPdf';
 
 const ReturnIdContext = createContext();
 
@@ -63,6 +64,7 @@ const ReturnsDetailPage = () => {
       <div className="grid-page">
         <ReturnsFilter onSelectionChange={handleSelectionChange} />
         {error && <div>{error}</div>}
+        <ExportToPdf /> 
         {/* {returnId && <p>Return ID: {returnId}</p>} */}
         <TabStructure />
       </div>
@@ -71,6 +73,7 @@ const ReturnsDetailPage = () => {
 };
 
 export default ReturnsDetailPage;
+
 
 
 

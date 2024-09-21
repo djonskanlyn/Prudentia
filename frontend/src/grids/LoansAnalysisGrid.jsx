@@ -5,6 +5,7 @@ import { formatData } from '../components/FormatFunctions';
 import { useReturnId } from '../pages/ReturnsDetailPage'; 
 
 
+
 const LoanAnalysisGrid = () => {
   const { themeClass } = useTheme();
   const returnId = useReturnId();  // Get returnId from context
@@ -180,7 +181,7 @@ const LoanAnalysisGrid = () => {
   };
 
   const tableMaturity = (
-    <table className="custom-table" style={{ marginBottom: '20px', width: '100%', tableLayout: 'fixed' }}>
+    <table id="loans-analysis-table" className="custom-table" style={{ marginBottom: '20px', width: '100%', tableLayout: 'fixed' }}>
       <thead>
         {/* First header row */}
         <tr>

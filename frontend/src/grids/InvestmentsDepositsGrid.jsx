@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
 import { formatData } from '../components/FormatFunctions';
-import { useReturnId } from '../pages/ReturnsDetailPage'; 
+import { useReturnId } from '../pages/ReturnsDetailPage';
 
 const InvestmentsDepositsGrid = () => {
   const { themeClass } = useTheme();
@@ -134,7 +134,7 @@ const InvestmentsDepositsGrid = () => {
   };
 
   const table = (
-    <table className="custom-table" style={{ marginBottom: '20px' }}>
+    <table id="investments-deposits-table" className="custom-table" style={{ marginBottom: '20px' }}>
       <thead>
         <tr>
           <th style={{ fontWeight: 'bold' }}>DEPOSITS & INVESTMENTS</th>

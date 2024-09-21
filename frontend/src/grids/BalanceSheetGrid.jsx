@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
 import { formatData } from '../components/FormatFunctions';
-import { useReturnId } from '../pages/ReturnsDetailPage'; 
+import { useReturnId } from '../pages/ReturnsDetailPage';
+
 
 const BalanceSheetGrid = () => {
   const { themeClass } = useTheme();
@@ -61,10 +62,10 @@ const BalanceSheetGrid = () => {
     fetchDataSource();
   }, [returnId]);
 
-  return (
-    <div className={`${themeClass} grid-container`} style={{ width: '700px', margin: '0 auto' }}>
-      {error && <div>Error: {error}</div>}
-      <table className="custom-table">
+
+
+  const table = (
+    <table id="balance-sheet-table" className="custom-table">
         <thead>
           <tr>
             <th>BALANCE SHEET</th>
@@ -84,6 +85,12 @@ const BalanceSheetGrid = () => {
           ))}
         </tbody>
       </table>
+  );
+
+  return (
+    <div className={`${themeClass} grid-container`} style={{ width: '700px', margin: '0 auto' }}>
+      {error && <div>Error: {error}</div>}
+      {!error && table}
     </div>
   );
 };

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
 import { formatData } from '../components/FormatFunctions';
-import { useReturnId } from '../pages/ReturnsDetailPage'; 
+import { useReturnId } from '../pages/ReturnsDetailPage';
+
 
 const CreditRiskGrid = () => {
   const { themeClass } = useTheme();
@@ -138,7 +139,7 @@ const CreditRiskGrid = () => {
   };
 
   const table = (
-    <table className="custom-table" style={{ marginBottom: '20px', width: '100%', tableLayout: 'fixed' }}>
+    <table id="credit-risk-table" className="custom-table" style={{ marginBottom: '20px', width: '100%', tableLayout: 'fixed' }}>
       <thead>
         {/* First header row */}
         <tr>
