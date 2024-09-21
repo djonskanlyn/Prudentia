@@ -494,3 +494,58 @@ html, body {
   border-bottom: 6px double #6E6E6E !important; /* Add border width and style */
   border-top: 3px solid #6E6E6E !important; /* Add border width and style */
 }
+
+
+/* ######### Tab Structure ######### */
+
+/* Container for tabs */
+.tab-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tab buttons styling */
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 10px; /* Rounded corners for tab buttons */
+  border: 1px solid #6E6E6E; /* Default border for inactive tabs */
+  background-color: #FFFFFF; /* Default background color for inactive tabs */
+  color: #181d20; /* Default text color */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.tab-buttons button:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-buttons button.active-tab {
+  border: 2px solid #181d20; /* Border for active tab */
+  background-color: #f0f0f0; /* Background for active tab */
+  color: #181d20; /* Text color for active tab */
+}
+
+/* Dark theme for tab buttons */
+.dark-theme .tab-buttons button {
+  background-color: #181d20;
+  border: 1px solid #6E6E6E;
+  color: #FFFFFF;
+}
+
+.dark-theme .tab-buttons button:hover {
+  background-color: #404040;
+}
+
+.dark-theme .tab-buttons button.active-tab {
+  background-color: #303030;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+}

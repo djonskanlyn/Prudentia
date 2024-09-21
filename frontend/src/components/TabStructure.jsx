@@ -18,44 +18,15 @@ const TabStructure = () => {
   };
 
   return (
-    <div className={`${themeClass} tab-container`} style={{ width: '100%', margin: '0 auto', padding: '20px' }}>
+    <div className={`${themeClass} tab-container`}>
+      
       {/* Tabs Navigation */}
-      <div className="tab-buttons" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-        <button
-          className={activeTab === 'IncomeExpenditure' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('IncomeExpenditure')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Income & Expenditure
-        </button>
-        <button
-          className={activeTab === 'BalanceSheet' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('BalanceSheet')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Balance Sheet
-        </button>
-        <button
-          className={activeTab === 'InvestmentsDeposits' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('InvestmentsDeposits')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Deposits & Investments
-        </button>
-        <button
-          className={activeTab === 'CreditRisk' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('CreditRisk')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Credit Risk Disclosures
-        </button>
-        <button
-          className={activeTab === 'LoansAnalysis' ? 'active-tab' : ''}
-          onClick={() => handleTabClick('LoansAnalysis')}
-          style={{ padding: '10px 20px', margin: '0 10px' }}
-        >
-          Loans Analysis
-        </button>
+      <div className="tab-buttons">
+        <button className={activeTab === 'IncomeExpenditure' ? 'active-tab' : ''} onClick={() => handleTabClick('IncomeExpenditure')}>Income & Expenditure</button>
+        <button className={activeTab === 'BalanceSheet' ? 'active-tab' : ''} onClick={() => handleTabClick('BalanceSheet')}>Balance Sheet</button>
+        <button className={activeTab === 'InvestmentsDeposits' ? 'active-tab' : ''} onClick={() => handleTabClick('InvestmentsDeposits')}>Deposits & Investments</button>
+        <button className={activeTab === 'CreditRisk' ? 'active-tab' : ''} onClick={() => handleTabClick('CreditRisk')}>Credit Risk Disclosures</button>
+        <button className={activeTab === 'LoansAnalysis' ? 'active-tab' : ''} onClick={() => handleTabClick('LoansAnalysis')}>Loans Analysis</button>
       </div>
 
       {/* Tab Content */}
@@ -66,6 +37,7 @@ const TabStructure = () => {
         {activeTab === 'CreditRisk' && <CreditRiskGrid />}
         {activeTab === 'LoansAnalysis' && <LoansAnalysisGrid />}
       </div>
+
     </div>
   );
 };
