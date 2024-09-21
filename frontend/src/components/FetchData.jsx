@@ -28,3 +28,4 @@ export const fetchData = async (url) => {
     throw new Error(error.message);
   }
 };
+

@@ -31,6 +31,7 @@ router.register(r'loan-maturity-dim', LoanMaturityDimViewSet)
 router.register(r'loan-category-dim', LoanCategoryDimViewSet)
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('returns-list-view/', ReturnsListView.as_view(), name='returns-list-view'),

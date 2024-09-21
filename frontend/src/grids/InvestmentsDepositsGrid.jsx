@@ -1,56 +1,139 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../components/ThemeContext';
+import { fetchData } from '../components/FetchData';
+import { formatData } from '../components/FormatFunctions';
+import { useReturnId } from '../pages/ReturnsDetailPage'; 
 
-const table1Data = [
-  { key: '0', dim: '', aaci: 'euro', iess: 'euro', cbd: 'euro', bb: 'euro', oi: 'euro', total: 'euro' },
-  { key: '1', dim: 'Cash equivalents', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '2', dim: 'Under 3 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '3', dim: '3 to 12 mths', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000' },
-  { key: '8', dim: 'Total', aaci: '9,000,000,000', iess: '9,000,000,000', cbd: '9,000,000,000', bb: '9,000,000,000', oi: '9,000,000,000', total: '9,000,000,000', className: 'grey-background' },
-];
+const InvestmentsDepositsGrid = () => {
+  const { themeClass } = useTheme();
+  const returnId = useReturnId();  // Get returnId from context
+  const [dataSource, setDataSource] = useState([]);
+  const [error, setError] = useState(null);
 
-const table2Data = [
-  { key: '0', dim: '% table total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
+  // Function to fetch and format data
+  const fetchDataSource = async () => {
+    if (!returnId) return;  // Ensure returnId is available before fetching
+      try {
+        // Use returnId in the endpoint
+        const endpoint = `data/deposits-investments-fact/?returnId=${returnId}`;
+        const data = await fetchData(endpoint);
 
-const table3Data = [
-  { key: '0', dim: '% row total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
+        // Format the data using formatData
+        const formattedData = data.map(item => formatData(item));
 
-const table4Data = [
-  { key: '0', dim: '% column total', aaci: '%', iess: '%', cbd: '%', bb: '%', oi: '%', total: '%' },
-  { key: '1', dim: 'Cash equivalents', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '2', dim: 'Under 3 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '3', dim: '3 to 12 mths', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '4', dim: '1 to 5 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '5', dim: '5 to 7 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '6', dim: '7 to 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '7', dim: 'Over 10 yrs', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00' },
-  { key: '8', dim: 'Total', aaci: '100.00', iess: '100.00', cbd: '100.00', bb: '100.00', oi: '100.00', total: '100.00', className: 'grey-background' },
-];
+        // Construct the table rows based on formatted data
+        const dataSource = [
+          {
+            key: '0', 
+            dim: '', 
+            aaci: 'euro', 
+            iess: 'euro', 
+            cbd: 'euro', 
+            bb: 'euro', 
+            oi: 'euro', 
+            total: 'euro',
+          },
+          {
+            key: '1', 
+            dim: 'Cash equivalents', 
+            aaci: findFormattedValue(formattedData, '1', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '1', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '1', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '1', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '1', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '1', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '2', 
+            dim: 'Under 3 mths', 
+            aaci: findFormattedValue(formattedData, '2', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '2', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '2', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '2', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '2', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '2', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '3', 
+            dim: '3 to 12 mths', 
+            aaci: findFormattedValue(formattedData, '3', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '3', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '3', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '3', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '3', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '3', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '4', 
+            dim: '1 to 5 yrs', 
+            aaci: findFormattedValue(formattedData, '4', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '4', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '4', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '4', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '4', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '4', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '5', 
+            dim: '5 to 7 yrs', 
+            aaci: findFormattedValue(formattedData, '5', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '5', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '5', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '5', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '5', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '5', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '6', 
+            dim: '7 to 10 yrs', 
+            aaci: findFormattedValue(formattedData, '6', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '6', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '6', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '6', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '6', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '6', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '7', 
+            dim: 'Over 10 yrs', 
+            aaci: findFormattedValue(formattedData, '7', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '7', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '7', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '7', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '7', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '7', 'totalDepositsAndInvestments')
+          },
+          {
+            key: '8', 
+            dim: 'Total', 
+            aaci: findFormattedValue(formattedData, '8', 'accountsAuthorisedCreditInstitutions'),
+            iess: findFormattedValue(formattedData, '8', 'irishEeaStateSecurities'),
+            cbd: findFormattedValue(formattedData, '8', 'centralBankDeposits'),
+            bb: findFormattedValue(formattedData, '8', 'bankBonds'),
+            oi: findFormattedValue(formattedData, '8', 'otherInvestments'),
+            total: findFormattedValue(formattedData, '8', 'totalDepositsAndInvestments'),
+            className: 'grey-background'
+          }
+        ];
 
-const InvestmentTable = ({ data }) => {
-  return (
+        setDataSource(dataSource); // Update the dataSource state with API data
+      } catch (err) {
+        setError('Failed to fetch data');
+      }
+  };
+
+  // Use useEffect to call the API when the component mounts
+  useEffect(() => {
+    fetchDataSource();
+  }, [returnId]);
+
+  // Helper function to find formatted value based on dimension
+  const findFormattedValue = (data, dim, key) => {
+    const entry = data.find(item => item.depositsInvestmentsDim === dim);  // Find the matching entry
+    return entry ? entry[key] : 'N/A';  // Return the value or 'N/A' if not found
+  };
+
+  const table = (
     <table className="custom-table" style={{ marginBottom: '20px' }}>
       <thead>
         <tr>
@@ -64,34 +147,29 @@ const InvestmentTable = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((item) => (
+        {dataSource.map((item) => (
           <tr key={item.key} className={item.className || ''}>
-            <td>{item.dim}</td>
-            <td>{item.aaci}</td>
-            <td>{item.iess}</td>
-            <td>{item.cbd}</td>
-            <td>{item.bb}</td>
-            <td>{item.oi}</td>
-            <td className={item.key !== '0' ? 'grey-background' : ''}>{item.total}</td>
+            <td> {item.dim} </td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }}>{item.aaci}</td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }}>{item.iess}</td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }}>{item.cbd}</td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }}>{item.bb}</td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }}>{item.oi}</td>
+            <td style={{ textAlign: item.key === '0' ? 'center' : 'right' }} className={item.key !== '0' ? 'grey-background' : ''}>
+              {item.total}
+            </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
-};
-
-const InvestmentsDepositsGrid = () => {
-  const { themeClass } = useTheme();
 
   return (
     <div className={`${themeClass} grid-container`} style={{ width: '900px', margin: '0 auto' }}>
-      <InvestmentTable data={table1Data} />
-      <InvestmentTable data={table2Data} />
-      <InvestmentTable data={table3Data} />
-      <InvestmentTable data={table4Data} />
+      {error && <div>Error: {error}</div>}
+      {!error && table}
     </div>
   );
 };
 
 export default InvestmentsDepositsGrid;
-

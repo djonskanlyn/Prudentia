@@ -494,3 +494,110 @@ html, body {
   border-bottom: 6px double #6E6E6E !important; /* Add border width and style */
   border-top: 3px solid #6E6E6E !important; /* Add border width and style */
 }
+
+
+/* ######### Tab Structure ######### */
+
+/* Container for tabs */
+.tab-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tab buttons styling */
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 10px; /* Rounded corners for tab buttons */
+  border: 1px solid #6E6E6E; /* Default border for inactive tabs */
+  background-color: #FFFFFF; /* Default background color for inactive tabs */
+  color: #181d20; /* Default text color */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.tab-buttons button:hover {
+  background-color: #f0f0f0;
+}
+
+.tab-buttons button.active-tab {
+  border: 2px solid #181d20; /* Border for active tab */
+  background-color: #f0f0f0; /* Background for active tab */
+  color: #181d20; /* Text color for active tab */
+}
+
+/* Dark theme for tab buttons */
+.dark-theme .tab-buttons button {
+  background-color: #181d20;
+  border: 1px solid #6E6E6E;
+  color: #FFFFFF;
+}
+
+.dark-theme .tab-buttons button:hover {
+  background-color: #404040;
+}
+
+.dark-theme .tab-buttons button.active-tab {
+  background-color: #303030;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+}
+
+/* ######### Returns Filter ######### */
+/* Filter Container */
+.filter-container {
+  display: flex;
+  justify-content: center; /* Center both firm and reporting date */
+  align-items: center;      /* Vertically align items */
+  gap: 40px; /* Add spacing between firm and reporting date */
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Minimalist styling for select inputs */
+.filter-container select {
+  appearance: none; /* Removes default styling like arrows */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px 20px;
+  font-size: 24px;  /* Adjust font size */
+  font-weight: normal; /* Bold text */
+  border: none; /* Removes border */
+  background: none; /* Removes background */
+  color: #333;  /* Dark text color */
+  cursor: pointer;
+  border-radius: 0;  /* No rounded corners */
+  border-bottom: 2px solid #ccc; /* Adds just a simple bottom border */
+  transition: border-color 0.3s ease;
+}
+
+/* Styling on focus */
+.filter-container select:focus {
+  border-bottom: 2px solid #6E6E6E; /* Simple blue bottom border on focus */
+  outline: none;
+}
+
+/* Adjust styling when there's a value */
+.filter-container select[value]:not([value=""]) {
+  border-bottom: 2px solid #6E6E6E; /* Blue bottom border when value is selected */
+}
+
+/* Dark Theme Adjustments */
+.dark-theme .filter-container select {
+  color: #fff; /* White text in dark theme */
+  border-bottom: 2px solid #555; /* Darker bottom border */
+}
+
+.dark-theme .filter-container select:focus {
+  border-bottom: 2px solid #6E6E6E; /* Light blue border when focused */
+}
+
+

@@ -105,6 +105,3 @@ class ReturnsListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'firm', 'firmName', 'templateName', 'reportingDate', 'quarterRef', 'dueDate', 'stateName', 'statusName', 'versionRef', 'firstSubmittedDatetime', 'lastSubmittedDatetime', 
         ]
-
-
-
