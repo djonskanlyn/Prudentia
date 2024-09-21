@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { fetchData } from '../components/FetchData';
 
 const ReturnsFilter = ({ onSelectionChange }) => {
+  // Initialize selectedFirm and selectedReportingDate from localStorage or default to empty values
+  const [selectedFirm, setSelectedFirm] = useState(localStorage.getItem('firm') || '');
+  const [selectedReportingDate, setSelectedReportingDate] = useState(localStorage.getItem('reportingDate') || '');
+  
   const [firms, setFirms] = useState([]);
   const [reportingDates, setReportingDates] = useState([]);
-  const [selectedFirm, setSelectedFirm] = useState('');
-  const [selectedReportingDate, setSelectedReportingDate] = useState('');
   const [error, setError] = useState(null);
 
   // Fetch data for the firms and reporting dates
@@ -28,6 +30,10 @@ const ReturnsFilter = ({ onSelectionChange }) => {
   // Update parent with selected values
   useEffect(() => {
     if (selectedFirm && selectedReportingDate) {
+      // Save to localStorage when the user selects a firm and reporting date
+      localStorage.setItem('firm', selectedFirm);
+      localStorage.setItem('reportingDate', selectedReportingDate);
+      // Pass the selected values to the parent component
       onSelectionChange({ firm: selectedFirm, reportingDate: selectedReportingDate });
     }
   }, [selectedFirm, selectedReportingDate]);
@@ -70,4 +76,5 @@ const ReturnsFilter = ({ onSelectionChange }) => {
 };
 
 export default ReturnsFilter;
+
 

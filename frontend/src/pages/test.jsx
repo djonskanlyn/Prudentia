@@ -9,18 +9,12 @@ const ReturnIdContext = createContext();
 export const useReturnId = () => useContext(ReturnIdContext);
 
 const ReturnsDetailPage = () => {
-  // Initialize state from localStorage or default values
-  const [selectedData, setSelectedData] = useState({
-    firm: localStorage.getItem('firm') || '',
-    reportingDate: localStorage.getItem('reportingDate') || ''
-  });
-  const [returnId, setReturnId] = useState(localStorage.getItem('returnId') || null);
+  const [selectedData, setSelectedData] = useState({ firm: '', reportingDate: '' });
+  const [returnId, setReturnId] = useState(null);
   const [error, setError] = useState(null);
 
-  // Handle selection change from the filter component
   const handleSelectionChange = (data) => {
     setSelectedData(data);
-    setError(null); // Clear any previous errors
   };
 
   const fetchReturnId = async (firm, reportingDate) => {
@@ -34,8 +28,6 @@ const ReturnsDetailPage = () => {
       if (matchedReturn) {
         setReturnId(matchedReturn.id);
         setError(null);
-        // Save returnId to localStorage after fetching
-        localStorage.setItem('returnId', matchedReturn.id);
       } else {
         setReturnId(null);
         setError('No matching return found.');
@@ -45,18 +37,11 @@ const ReturnsDetailPage = () => {
     }
   };
 
-  // Use useEffect to monitor firm and reportingDate changes
   useEffect(() => {
-    const { firm, reportingDate } = selectedData;
-
-    // Check if both firm and reportingDate are selected before fetching returnId
-    if (firm && reportingDate) {
-      fetchReturnId(firm, reportingDate);
-      // Save firm and reportingDate to localStorage after selection
-      localStorage.setItem('firm', firm);
-      localStorage.setItem('reportingDate', reportingDate);
+    if (selectedData.firm && selectedData.reportingDate) {
+      fetchReturnId(selectedData.firm, selectedData.reportingDate);
     }
-  }, [selectedData]); // This will run whenever firm or reportingDate changes
+  }, [selectedData]);
 
   return (
     <ReturnIdContext.Provider value={returnId}>
@@ -71,9 +56,3 @@ const ReturnsDetailPage = () => {
 };
 
 export default ReturnsDetailPage;
-
-
-
-
-
-
