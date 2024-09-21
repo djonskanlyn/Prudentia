@@ -1,58 +1,78 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import ReturnsFilter from '../components/ReturnsFilter';
-import TabStructure from '../components/TabStructure';
+import React, { useState, useEffect } from 'react';
 import { fetchData } from '../components/FetchData';
 
-const ReturnIdContext = createContext();
-
-// Custom hook to use the returnId context
-export const useReturnId = () => useContext(ReturnIdContext);
-
-const ReturnsDetailPage = () => {
-  const [selectedData, setSelectedData] = useState({ firm: '', reportingDate: '' });
-  const [returnId, setReturnId] = useState(null);
+const ReturnsFilter = ({ onSelectionChange }) => {
+  // Initialize selectedFirm and selectedReportingDate from localStorage or default to empty values
+  const [selectedFirm, setSelectedFirm] = useState(localStorage.getItem('firm') || '');
+  const [selectedReportingDate, setSelectedReportingDate] = useState(localStorage.getItem('reportingDate') || '');
+  
+  const [firms, setFirms] = useState([]);
+  const [reportingDates, setReportingDates] = useState([]);
   const [error, setError] = useState(null);
 
-  const handleSelectionChange = (data) => {
-    setSelectedData(data);
-  };
-
-  const fetchReturnId = async (firm, reportingDate) => {
+  // Fetch data for the firms and reporting dates
+  const fetchReturnsList = async () => {
     try {
       const returnsList = await fetchData('data/returns-list-view/');
-      const matchedReturn = returnsList.find(item => 
-        item.firmName.toLowerCase() === firm.toLowerCase() &&
-        item.reportingDate === reportingDate &&
-        item.stateName.toLowerCase() === 'current'
-      );
-      if (matchedReturn) {
-        setReturnId(matchedReturn.id);
-        setError(null);
-      } else {
-        setReturnId(null);
-        setError('No matching return found.');
-      }
+      const uniqueFirms = [...new Set(returnsList.map(item => item.firmName))];
+      const uniqueReportingDates = [...new Set(returnsList.map(item => item.reportingDate))];
+      setFirms(uniqueFirms);
+      setReportingDates(uniqueReportingDates);
     } catch (err) {
-      setError('Failed to fetch return data.');
+      setError('Failed to fetch firms or reporting dates');
     }
   };
 
   useEffect(() => {
-    if (selectedData.firm && selectedData.reportingDate) {
-      fetchReturnId(selectedData.firm, selectedData.reportingDate);
+    fetchReturnsList();
+  }, []);
+
+  // Update parent with selected values
+  useEffect(() => {
+    if (selectedFirm && selectedReportingDate) {
+      // Save to localStorage when the user selects a firm and reporting date
+      localStorage.setItem('firm', selectedFirm);
+      localStorage.setItem('reportingDate', selectedReportingDate);
+      // Pass the selected values to the parent component
+      onSelectionChange({ firm: selectedFirm, reportingDate: selectedReportingDate });
     }
-  }, [selectedData]);
+  }, [selectedFirm, selectedReportingDate]);
 
   return (
-    <ReturnIdContext.Provider value={returnId}>
-      <div className="grid-page">
-        <ReturnsFilter onSelectionChange={handleSelectionChange} />
-        {error && <div>{error}</div>}
-        {returnId && <p>Return ID: {returnId}</p>}
-        <TabStructure />
+    <div className="filter-container">
+      {error && <div>Error: {error}</div>}
+      
+      {/* Firm Selection */}
+      <div>
+        <label htmlFor="firm-select">Select Firm:</label>
+        <select
+          id="firm-select"
+          value={selectedFirm}
+          onChange={e => setSelectedFirm(e.target.value)}
+        >
+          {/* <option value="">-- Select a Firm --</option> */}
+          {firms.map(firm => (
+            <option key={firm} value={firm}>{firm}</option>
+          ))}
+        </select>
       </div>
-    </ReturnIdContext.Provider>
+
+      {/* Reporting Date Selection */}
+      <div>
+        <label htmlFor="reporting-date-select">Select Reporting Date:</label>
+        <select
+          id="reporting-date-select"
+          value={selectedReportingDate}
+          onChange={e => setSelectedReportingDate(e.target.value)}
+        >
+          {/* <option value="">-- Select a Reporting Date --</option> */}
+          {reportingDates.map(date => (
+            <option key={date} value={date}>{date}</option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 };
 
-export default ReturnsDetailPage;
+export default ReturnsFilter;
