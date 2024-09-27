@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from data.models import ScheduledFact, BalanceSheetFact, IncomeExpenditureFact, DepositsInvestmentsFact
-from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure
+from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure
 
 class Command(BaseCommand):
     help = 'Generate CapitalKeyMeasure entries for existing data'
@@ -50,5 +50,32 @@ class Command(BaseCommand):
 
             # Save the liquidity key measures
             liquidity_key_measure.save()
+            
+
+            # === InvestmentKeyMeasure calculations ===
+            investment_key_measure, created = InvestmentKeyMeasure.objects.get_or_create(returnId=scheduled_fact)
+
+            # If BalanceSheetFact exists, update the investment measures
+            if balance_sheet_fact:
+                investment_key_measure.calculate_total_investments(balance_sheet_fact)
+                investment_key_measure.calculate_investments_to_assets_ratio(balance_sheet_fact)
+
+            # If IncomeExpenditureFact exists, update the return on investments ratio
+            if income_expenditure_fact:
+                investment_key_measure.calculate_return_on_investments_ratio(balance_sheet_fact, income_expenditure_fact)
+
+            # If InvestmentsFacts exist, update the related ratios
+            if balance_sheet_fact and investments_facts.exists():
+                investment_key_measure.calculate_aaci_investments_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_ieeass_investments_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_cbd_investments_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_bb_investments_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_oi_investments_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_investments_over_5_yrs_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_investments_over_7_yrs_ratio(balance_sheet_fact, investments_facts)
+                investment_key_measure.calculate_investments_over_10_yrs_ratio(balance_sheet_fact, investments_facts)
+
+            # Save the investment key measures
+            investment_key_measure.save()
         
         self.stdout.write(self.style.SUCCESS('Successfully generated key measures for all existing data'))

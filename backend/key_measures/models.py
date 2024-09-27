@@ -119,3 +119,143 @@ class LiquidityKeyMeasure(models.Model):
     def __str__(self):
         return f"Liquidity Key Measures for Return Id {self.returnId.id}"
 
+class InvestmentKeyMeasure(models.Model):
+    returnId = models.OneToOneField(ScheduledFact, on_delete=models.CASCADE, primary_key=True, verbose_name="Return Id")
+
+    # Computed fields for key measures
+    totalInvestments = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Total Investments", null=True, blank=True)
+    investmentsToAssetsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Investments to Assets Ratio", null=True, blank=True)
+    aaciToInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="AACI to Investments Ratio", null=True, blank=True)
+    ieeassToInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="IEEASS to Investments Ratio", null=True, blank=True)
+    centralBankDepositsToInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="CBD to Investments Ratio", null=True, blank=True)
+    bankBondsToInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Bank Bonds to Investments Ratio", null=True, blank=True)
+    otherInvestmentsToInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Other Investments to Investments Ratio", null=True, blank=True)
+    investmentsOver5YearsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Investments Over 5 Years Ratio", null=True, blank=True)
+    investmentsOver7YearsRatio= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Investments Over 7 Years Ratio", null=True, blank=True)
+    investmentsOver10YearsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Investments Over 10 Years Ratio", null=True, blank=True)
+    returnOnInvestmentsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Return on Investments", null=True, blank=True)
+
+    def calculate_total_investments(self, balance_sheet_fact):
+        self.totalInvestments = balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther
+
+    def calculate_investments_to_assets_ratio(self, balance_sheet_fact):
+        total_investments = balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther
+        if balance_sheet_fact.totalAssets > 0:
+            self.investmentsToAssetsRatio = (total_investments / balance_sheet_fact.totalAssets) * 100
+        else:
+            self.investmentsToAssetsRatio = 0
+    
+    def calculate_aaci_investments_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 8 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[8])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('accountsAuthorisedCreditInstitutions'))['accountsAuthorisedCreditInstitutions__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.aaciToInvestmentsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.aaciToInvestmentsRatio = 0
+
+    def calculate_ieeass_investments_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 8 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[8])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('irishEeaStateSecurities'))['irishEeaStateSecurities__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.ieeassToInvestmentsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.ieeassToInvestmentsRatio = 0
+    
+    def calculate_cbd_investments_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 8 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[8])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('centralBankDeposits'))['centralBankDeposits__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.centralBankDepositsToInvestmentsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.centralBankDepositsToInvestmentsRatio = 0
+    
+    def calculate_bb_investments_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 8 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[8])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('bankBonds'))['bankBonds__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.bankBondsToInvestmentsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.bankBondsToInvestmentsRatio = 0
+    
+    def calculate_oi_investments_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 8 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[8])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('otherInvestments'))['otherInvestments__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.otherInvestmentsToInvestmentsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.otherInvestmentsToInvestmentsRatio = 0
+    
+    def calculate_investments_over_5_yrs_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 5,6,7 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[5,6,7])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('totalDepositsAndInvestments'))['totalDepositsAndInvestments__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.investmentsOver5YearsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.investmentsOver5YearsRatio = 0
+    
+    def calculate_investments_over_7_yrs_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 6,7 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[6,7])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('totalDepositsAndInvestments'))['totalDepositsAndInvestments__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.investmentsOver7YearsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.investmentsOver7YearsRatio = 0
+    
+    def calculate_investments_over_10_yrs_ratio(self, balance_sheet_fact, investments_facts):
+
+        # Filter by dimension keys 7 in DepositsInvestmentsFact
+        investments = investments_facts.filter(depositsInvestmentsDim_id__in=[7])
+        
+        # Sum the related investments
+        investments_total = investments.aggregate(models.Sum('totalDepositsAndInvestments'))['totalDepositsAndInvestments__sum'] or 0
+
+        if balance_sheet_fact.totalAssets > 0:
+            self.investmentsOver10YearsRatio = (investments_total / (balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther)) * 100
+        else:
+            self.investmentsOver10YearsRatio = 0
+
+    def calculate_return_on_investments_ratio(self, balance_sheet_fact, income_expenditure_fact):
+        total_investments = balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther
+        if total_investments> 0:
+            self.returnOnInvestmentsRatio= (income_expenditure_fact.otherInterestIncome / total_investments) * 100
+        else:
+            self.returnOnInvestmentsRatio = 0
+    
+    def __str__(self):
+        return f"Investment Key Measures for Return Id {self.returnId.id}"
+    
