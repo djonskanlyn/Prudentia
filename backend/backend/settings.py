@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'tasks',
     'authapp',
     'data',
+    'key_measures'
 ]
 
 MIDDLEWARE = [
