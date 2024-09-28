@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'tasks',
     'authapp',
     'data',
-    'key_measures'
+    'key_measures',
+    'pr_reviews'
 ]
 
 MIDDLEWARE = [
