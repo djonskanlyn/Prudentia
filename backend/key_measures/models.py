@@ -251,7 +251,7 @@ class InvestmentKeyMeasure(models.Model):
 
     def calculate_return_on_investments_ratio(self, balance_sheet_fact, income_expenditure_fact):
         total_investments = balance_sheet_fact.depositsInvestmentsCashEquivalents + balance_sheet_fact.depositsInvestmentsOther
-        if total_investments> 0:
+        if total_investments > 0:
             self.returnOnInvestmentsRatio= (income_expenditure_fact.otherInterestIncome / total_investments) * 100
         else:
             self.returnOnInvestmentsRatio = 0
@@ -259,3 +259,201 @@ class InvestmentKeyMeasure(models.Model):
     def __str__(self):
         return f"Investment Key Measures for Return Id {self.returnId.id}"
     
+class CreditKeyMeasure(models.Model):
+    returnId = models.OneToOneField(ScheduledFact, on_delete=models.CASCADE, primary_key=True, verbose_name="Return Id")
+
+    # Computed fields for key measures
+    totalLoans = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Total Loans", null=True, blank=True)
+    totalProvisions= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Total Provisions", null=True, blank=True)
+    arrearsOver9Weeks = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Arrears Over 9 Weeks", null=True, blank=True)
+    loanToAssetsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Loans to Assets Ratio", null=True, blank=True)
+    arrearsOver9WeeksRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Arrears Over 9 Weeks Ratio", null=True, blank=True)
+    personalLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Personal Loans Ratio", null=True, blank=True)
+    houseLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="House Loans Ratio", null=True, blank=True)
+    commercialLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Commercial Loans Ratio", null=True, blank=True)
+    communityLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Community Loans Ratio", null=True, blank=True)
+    otherLoansRatio= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Other Loans Ratio", null=True, blank=True)
+    advancedPersonalLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Personal Loans Ratio", null=True, blank=True)
+    advancedHouseLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced House Loans Ratio", null=True, blank=True)
+    advancedCommercialLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Commercial Loans Ratio", null=True, blank=True)
+    advancedCommunityLoansRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Community Loans Ratio", null=True, blank=True)
+    advancedOtherLoansRatio= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Other Loans Ratio", null=True, blank=True)
+    loansOver5YearsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Loans Over 5 Years Ratio", null=True, blank=True)
+    loansOver10YearsRatio = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Loans Over 10 Years Ratio", null=True, blank=True)
+    advancedLoansOver5YearsRatio  = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Loans Over 5 Years Ratio", null=True, blank=True)
+    advancedLoansOver10YearsRatio= models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Advanced Loans Over 10 Years Ratio", null=True, blank=True)
+
+    def calculate_total_loans(self, balance_sheet_fact):
+        self.totalLoans = balance_sheet_fact.membersLoans
+    
+    def calculate_total_provisions(self, balance_sheet_fact):
+        self.totalProvisions = balance_sheet_fact.badDebtProvisions * -1
+    
+    def calculate_arrears_over_9_weeks(self, credit_risk_fact):
+        arrears = credit_risk_fact.filter(creditRiskDim_id__in=[4,5,6,7,8])
+        arrears_total = arrears.aggregate(models.Sum('amountCreditRisk'))['amountCreditRisk__sum'] or 0
+        self.arrearsOver9Weeks = arrears_total
+    
+    def calculate_loan_to_assets_ratio(self, balance_sheet_fact):
+        if balance_sheet_fact.totalAssets > 0:
+            self.loanToAssetsRatio = (balance_sheet_fact.membersLoans / balance_sheet_fact.totalAssets) * 100
+        else:
+            self.loanToAssetsRatio = 0
+
+    def calculate_arrears_over_9_weeks_ratio(self, credit_risk_fact, balance_sheet_fact):
+        arrears = credit_risk_fact.filter(creditRiskDim_id__in=[4,5,6,7,8])
+        arrears_total = arrears.aggregate(models.Sum('amountCreditRisk'))['amountCreditRisk__sum'] or 0
+        if balance_sheet_fact.membersLoans > 0:
+            self.arrearsOver9WeeksRatio = (arrears_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.arrearsOver9WeeksRatio = 0
+    
+    def calculate_personal_loans_ratio(self, balance_sheet_fact, outstanding_loan_category_fact):
+        loans = outstanding_loan_category_fact.filter(loanCategoryDim_id__in=[1])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingCategory'))['amountOutstandingCategory__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.personalLoansRatio = (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.personalLoansRatio = 0
+    
+    def calculate_house_loans_ratio(self, balance_sheet_fact, outstanding_loan_category_fact):
+        loans = outstanding_loan_category_fact.filter(loanCategoryDim_id__in=[2])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingCategory'))['amountOutstandingCategory__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.houseLoansRatio = (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.houseLoansRatio = 0
+    
+    def calculate_commercial_loans_ratio(self, balance_sheet_fact, outstanding_loan_category_fact):
+        loans = outstanding_loan_category_fact.filter(loanCategoryDim_id__in=[3])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingCategory'))['amountOutstandingCategory__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.commercialLoansRatio = (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.commercialLoansRatio = 0
+    
+    def calculate_community_loans_ratio(self, balance_sheet_fact, outstanding_loan_category_fact):
+        loans = outstanding_loan_category_fact.filter(loanCategoryDim_id__in=[4])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingCategory'))['amountOutstandingCategory__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.communityLoansRatio = (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.communityLoansRatio = 0
+
+    def calculate_other_loans_ratio(self, balance_sheet_fact, outstanding_loan_category_fact):
+        loans = outstanding_loan_category_fact.filter(loanCategoryDim_id__in=[5])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingCategory'))['amountOutstandingCategory__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.otherLoansRatio = (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.otherLoansRatio = 0
+    
+    def calculate_advanced_personal_loans_ratio(self, advanced_loan_category_fact):
+        loans = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[1])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        advanced = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[6])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedPersonalLoansRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedPersonalLoansRatio = 0
+
+    def calculate_advanced_house_loans_ratio(self, advanced_loan_category_fact):
+        loans = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[2])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        advanced = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[6])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedHouseLoansRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedHouseLoansRatio = 0
+
+    def calculate_advanced_commercial_loans_ratio(self, advanced_loan_category_fact):
+        loans = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[3])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        advanced = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[6])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedCommercialLoansRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedCommercialLoansRatio = 0
+    
+    def calculate_advanced_community_loans_ratio(self, advanced_loan_category_fact):
+        loans = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[4])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        advanced = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[6])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedCommunityLoansRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedCommunityLoansRatio = 0
+
+    def calculate_advanced_other_loans_ratio(self, advanced_loan_category_fact):
+        loans = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[5])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        advanced = advanced_loan_category_fact.filter(loanCategoryDim_id__in=[6])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedCategory'))['amountAdvancedCategory__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedOtherLoansRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedOtherLoansRatio = 0
+    
+    def calculate_loans_over_5_years_ratio(self, balance_sheet_fact, outstanding_loan_maturity_fact):
+        loans = outstanding_loan_maturity_fact.filter(loanMaturityDim_id__in=[4,5,6])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingMaturity'))['amountOutstandingMaturity__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.loansOver5YearsRatio= (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.loansOver5YearsRatio = 0
+    
+    def calculate_loans_over_10_years_ratio(self, balance_sheet_fact, outstanding_loan_maturity_fact):
+        loans = outstanding_loan_maturity_fact.filter(loanMaturityDim_id__in=[5,6])
+        loans_total = loans.aggregate(models.Sum('amountOutstandingMaturity'))['amountOutstandingMaturity__sum'] or 0
+
+        if balance_sheet_fact.membersLoans > 0:
+            self.loansOver10YearsRatio= (loans_total / balance_sheet_fact.membersLoans) * 100
+        else:
+            self.loansOver10YearsRatio = 0
+
+    def calculate_advanced_loans_over_5_years_ratio(self, advanced_loan_maturity_fact):
+        loans = advanced_loan_maturity_fact.filter(loanMaturityDim_id__in=[4,5,6])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedMaturity'))['amountAdvancedMaturity__sum'] or 0
+
+        advanced = advanced_loan_maturity_fact.filter(loanMaturityDim_id__in=[7])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedMaturity'))['amountAdvancedMaturity__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedLoansOver5YearsRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedLoansOver5YearsRatio  = 0
+
+    def calculate_advanced_loans_over_10_years_ratio(self, advanced_loan_maturity_fact):
+        loans = advanced_loan_maturity_fact.filter(loanMaturityDim_id__in=[5,6])
+        loans_total = loans.aggregate(models.Sum('amountAdvancedMaturity'))['amountAdvancedMaturity__sum'] or 0
+
+        advanced = advanced_loan_maturity_fact.filter(loanMaturityDim_id__in=[7])
+        advanced_total = advanced.aggregate(models.Sum('amountAdvancedMaturity'))['amountAdvancedMaturity__sum'] or 0
+
+        if advanced_total > 0:
+            self.advancedLoansOver10YearsRatio = (loans_total / advanced_total) * 100
+        else:
+            self.advancedLoansOver10YearsRatio  = 0
+
+    def __str__(self):
+        return f"Credit Key Measures for Return Id {self.returnId.id}"
