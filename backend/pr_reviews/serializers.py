@@ -14,3 +14,12 @@ class ReturnPreviousSerializer(serializers.Serializer):
     sub_rank = serializers.IntegerField()
     sub_quarterRef = serializers.CharField()
     sub_returnId = serializers.IntegerField(allow_null=True)
+
+class ReturnWithMeasuresSerializer(serializers.Serializer):
+    base_return_id = serializers.IntegerField()
+    sub_quarterRef = serializers.CharField()
+    sub_reportingPeriod = serializers.CharField()  # Will be in the format YYYY-MM
+    sub_returnId = serializers.IntegerField(allow_null=True)
+    source = serializers.CharField(allow_null=True)
+    measure = serializers.CharField(allow_null=True)
+    value = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)

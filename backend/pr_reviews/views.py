@@ -3,7 +3,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PivotedKeyMeasureSerializer, ReturnPreviousSerializer
+from .serializers import PivotedKeyMeasureSerializer, ReturnPreviousSerializer, ReturnWithMeasuresSerializer
 from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure  # Import models
 from data.models import ScheduledFact
 from drf_yasg.utils import swagger_auto_schema
@@ -85,6 +85,8 @@ class KeyMeasuresLongFormatView(APIView):
         # Serialize the data before returning
         serializer = PivotedKeyMeasureSerializer(long_format_data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 def get_previous_four_quarters(quarter_ref):
     """
@@ -194,3 +196,73 @@ class ReturnAndPreviousQuartersView(APIView):
         # Serialize the result
         serializer = ReturnPreviousSerializer(all_results, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+def get_reporting_period_from_quarter(quarter_ref):
+    """
+    Convert a quarterRef (e.g., 202402) to a reporting period in the format YYYY-MM,
+    representing the end of the quarter (e.g., 2024-03 for Q1, 2024-06 for Q2, etc.).
+    """
+    year = int(str(quarter_ref)[:4])
+    quarter = int(str(quarter_ref)[4:])
+
+    quarter_end_months = {1: '03', 2: '06', 3: '09', 4: '12'}
+    month = quarter_end_months.get(quarter, '03')
+    return f"{year}-{month}"
+
+# Add this new view to your views.py
+class ReturnWithMeasuresView(APIView):
+    """
+    API View to get the base returnId and the previous returnIds with their corresponding sub_rank,
+    sub_quarterRef, sub_reportingPeriod, sub_returnId, and the related source, measure, and value.
+    """
+
+    return_id_param = openapi.Parameter(
+        'returnId', openapi.IN_QUERY, description="Return Id to filter by", type=openapi.TYPE_INTEGER
+    )
+
+    @swagger_auto_schema(
+        operation_description="Retrieve previous return details with reporting periods, sources, measures, and values.",
+        manual_parameters=[return_id_param],
+        responses={200: ReturnWithMeasuresSerializer(many=True)}
+    )
+    def get(self, request):
+        return_id = request.query_params.get('returnId')
+
+        if return_id:
+            try:
+                base_return = ScheduledFact.objects.get(id=return_id, state_id=1)
+                previous_quarters = get_flattened_return_and_previous_quarters(base_return)
+                response_data = []
+
+                # Loop through each quarter and add the key measures
+                for quarter_data in previous_quarters:
+                    sub_return_id = quarter_data["sub_returnId"]
+
+                    if sub_return_id:
+                        # Fetch key measures using the existing pivot function
+                        key_measures = pivot_all_key_measures(sub_return_id)
+                        sub_reporting_period = get_reporting_period_from_quarter(quarter_data["sub_quarterRef"])
+
+                        # Append key measures to the response
+                        for measure in key_measures:
+                            response_data.append({
+                                "base_return_id": quarter_data["base_return_id"],
+                                "sub_quarterRef": quarter_data["sub_quarterRef"],
+                                "sub_reportingPeriod": sub_reporting_period,
+                                "sub_returnId": sub_return_id,
+                                "source": measure["source"],
+                                "measure": measure["measure"],
+                                "value": measure["value"]
+                            })
+
+                # Return serialized response data
+                if response_data:
+                    serializer = ReturnWithMeasuresSerializer(response_data, many=True)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response({"detail": "No key measures found for the given returnId."}, status=status.HTTP_404_NOT_FOUND)
+
+            except ScheduledFact.DoesNotExist:
+                return Response({"detail": "No return found for the given returnId."}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
