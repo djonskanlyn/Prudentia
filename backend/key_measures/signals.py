@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.management import call_command
 from data.models import (
     BalanceSheetFact, 
     IncomeExpenditureFact, 
@@ -8,8 +9,10 @@ from data.models import (
     OutstandingLoanCategoryFact, 
     AdvancedLoanCategoryFact, 
     OutstandingLoanMaturityFact, 
-    AdvancedLoanMaturityFact
+    AdvancedLoanMaturityFact,
+    ScheduledFact
 )
+
 from .models import (
     CapitalKeyMeasure, 
     LiquidityKeyMeasure, 
@@ -168,6 +171,20 @@ def update_credit_key_measures_from_advanced_maturity(sender, instance, **kwargs
     credit_key_measure.calculate_advanced_loans_over_10_years_ratio(advanced_maturity_facts)
     credit_key_measure.save()
 
+# Signal to recalculate averages when new ScheduledFact is added or updated
+@receiver(post_save, sender=ScheduledFact)
+def recalculate_averages_on_scheduled_fact_save(sender, instance, **kwargs):
+    # Trigger recalculation of averages when the ScheduledFact is saved and has state_id=1
+    if instance.state_id == 1:
+        call_command('calculate_averages')
 
+# Signal to recalculate averages when any key measure (capital, liquidity, etc.) is saved
+@receiver(post_save, sender=CapitalKeyMeasure)
+@receiver(post_save, sender=LiquidityKeyMeasure)
+@receiver(post_save, sender=InvestmentKeyMeasure)
+@receiver(post_save, sender=CreditKeyMeasure)
+def recalculate_averages_on_key_measure_save(sender, instance, **kwargs):
+    # Trigger recalculation of averages when a key measure is saved
+    call_command('calculate_averages')
 
 

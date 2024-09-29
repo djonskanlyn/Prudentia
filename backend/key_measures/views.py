@@ -1,10 +1,11 @@
 from rest_framework import viewsets
-from .models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure
+from .models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 from .serializers import (
     CapitalKeyMeasureSerializer,
     LiquidityKeyMeasureSerializer,
     InvestmentKeyMeasureSerializer,
-    CreditKeyMeasureSerializer
+    CreditKeyMeasureSerializer,
+    AverageKeyMeasureSerializer
 )
 
 class CapitalKeyMeasureViewSet(viewsets.ModelViewSet):
@@ -23,3 +24,6 @@ class CreditKeyMeasureViewSet(viewsets.ModelViewSet):
     queryset = CreditKeyMeasure.objects.all()
     serializer_class = CreditKeyMeasureSerializer
 
+class AverageKeyMeasureViewSet(viewsets.ModelViewSet):
+    queryset = AverageKeyMeasure.objects.all()
+    serializer_class = AverageKeyMeasureSerializer

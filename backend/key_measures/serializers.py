@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure
+from .models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 
 class CapitalKeyMeasureSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,9 @@ class InvestmentKeyMeasureSerializer(serializers.ModelSerializer):
 class CreditKeyMeasureSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditKeyMeasure
+        fields = '__all__'
+
+class AverageKeyMeasureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AverageKeyMeasure
         fields = '__all__'

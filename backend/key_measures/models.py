@@ -457,3 +457,17 @@ class CreditKeyMeasure(models.Model):
 
     def __str__(self):
         return f"Credit Key Measures for Return Id {self.returnId.id}"
+
+class AverageKeyMeasure(models.Model):
+    quarter_ref = models.CharField(max_length=6)  # Format: YYYYQQ
+    source = models.CharField(max_length=50)  # Source of the measure (e.g., capital, liquidity)
+    measure = models.CharField(max_length=100)  # Human-readable name of the measure
+    measure_id = models.CharField(max_length=100)  # Field name for the measure
+    average_value = models.DecimalField(max_digits=15, decimal_places=2, null=True)  # The average value
+
+    class Meta:
+        unique_together = ('quarter_ref', 'source', 'measure_id')  # Ensure each measure is unique for the quarter
+
+    def __str__(self):
+        return f"{self.quarter_ref} - {self.source} - {self.measure}"
+
