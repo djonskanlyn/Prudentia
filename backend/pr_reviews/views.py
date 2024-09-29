@@ -1,13 +1,20 @@
-# pr_reviews/views.py
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import PivotedKeyMeasureSerializer, ReturnPreviousSerializer, ReturnWithMeasuresSerializer, ReturnWithPivotedMeasuresSerializer
-from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure
+from rest_framework import status, generics
+from .serializers import (
+    PivotedKeyMeasureSerializer, 
+    ReturnPreviousSerializer, 
+    ReturnWithMeasuresSerializer, 
+    ReturnWithPivotedMeasuresSerializer, 
+    ReturnWithPivotedMeasuresWithAverageSerializer,
+    PRReviewWithDetailsSerializer
+)
+from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 from data.models import ScheduledFact
+from .models import PRReviewTable
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
 
 # Helper function to pivot a single model instance into long format
 def pivot_model_to_long_format(model_instance, source, exclude_fields=['returnId']):
@@ -357,3 +364,114 @@ class ReturnWithPivotedMeasuresView(APIView):
 
         return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+class ReturnWithPivotedMeasuresWithAverageView(APIView):
+    """
+    API View to get the base returnId, pivot out the values for the current quarter and the previous four quarters,
+    and also calculate the average for each measure based on the quarterRef.
+    Fields: base_return_id, source, measure, current_Q0, prior_Q1, prior_Q2, prior_Q3, prior_Q4, perc_diff_pq, perc_diff_py, average.
+    """
+
+    return_id_param = openapi.Parameter(
+        'returnId', openapi.IN_QUERY, description="Return Id to filter by", type=openapi.TYPE_INTEGER
+    )
+
+    @swagger_auto_schema(
+        operation_description="Retrieve pivoted key measures across current and previous quarters with averages and percent differences.",
+        manual_parameters=[return_id_param],
+        responses={200: ReturnWithPivotedMeasuresWithAverageSerializer(many=True)}
+    )
+    def get(self, request):
+        return_id = request.query_params.get('returnId')
+
+        if return_id:
+            try:
+                # Fetch the base return object
+                base_return = ScheduledFact.objects.get(id=return_id, state_id=1)
+
+                # Get the flattened structure for the previous four quarters, including the base return
+                previous_quarters = get_flattened_return_and_previous_quarters(base_return)
+
+                pivoted_data = {}
+
+                # Iterate over each quarter and get key measures
+                for idx, quarter_data in enumerate(previous_quarters):
+                    sub_return_id = quarter_data["sub_returnId"]
+
+                    if sub_return_id:
+                        # Fetch key measures for the quarter
+                        key_measures = pivot_all_key_measures(sub_return_id)
+
+                        # Pivot data for each measure
+                        for measure in key_measures:
+                            measure_key = (measure["source"], measure["measureId"])  # Using measureId for consistency
+
+                            # Initialize if the measure is not yet in the pivoted_data
+                            if measure_key not in pivoted_data:
+                                pivoted_data[measure_key] = {
+                                    "base_return_id": return_id,
+                                    "source": measure["source"],
+                                    "measure": measure["measure"],
+                                    "current_Q0": None, "prior_Q1": None, "prior_Q2": None,
+                                    "prior_Q3": None, "prior_Q4": None,
+                                    "perc_diff_pq": None,  # Initialize as None
+                                    "perc_diff_py": None,   # Initialize as None
+                                    "average": None         # New field for average
+                                }
+
+                            # Assign the measure's value to the respective quarter (Q0 to Q4)
+                            if idx == 0:
+                                pivoted_data[measure_key]["current_Q0"] = measure["value"]
+                            elif idx == 1:
+                                pivoted_data[measure_key]["prior_Q1"] = measure["value"]
+                            elif idx == 2:
+                                pivoted_data[measure_key]["prior_Q2"] = measure["value"]
+                            elif idx == 3:
+                                pivoted_data[measure_key]["prior_Q3"] = measure["value"]
+                            elif idx == 4:
+                                pivoted_data[measure_key]["prior_Q4"] = measure["value"]
+
+                # Calculate percentage differences and fetch the average values
+                for measure_key, data in pivoted_data.items():
+                    current_Q0 = data.get("current_Q0")
+                    prior_Q1 = data.get("prior_Q1")
+                    prior_Q4 = data.get("prior_Q4")
+
+                    # Calculate perc_diff_pq ((current_Q0 - prior_Q1) / prior_Q1) * 100
+                    if current_Q0 is not None and prior_Q1 is not None and prior_Q1 != 0:
+                        data["perc_diff_pq"] = ((current_Q0 - prior_Q1) / prior_Q1) * 100
+                    else:
+                        data["perc_diff_pq"] = None
+
+                    # Calculate perc_diff_py ((current_Q0 - prior_Q4) / prior_Q4) * 100
+                    if current_Q0 is not None and prior_Q4 is not None and prior_Q4 != 0:
+                        data["perc_diff_py"] = ((current_Q0 - prior_Q4) / prior_Q4) * 100
+                    else:
+                        data["perc_diff_py"] = None
+
+                    # Fetch the average for the measure from AverageKeyMeasure table using source, measureId and quarter_ref
+                    average_obj = AverageKeyMeasure.objects.filter(
+                        quarter_ref=base_return.quarterRef,  # Use the base quarterRef for averages
+                        source=data["source"],
+                        measure_id=measure_key[1]  # Use the measureId from the pivot data
+                    ).first()
+
+                    if average_obj:
+                        data["average"] = average_obj.average_value
+                    else:
+                        data["average"] = None
+
+                # Convert pivoted_data to a list for serialization
+                response_data = list(pivoted_data.values())
+
+                # Return serialized response
+                serializer = ReturnWithPivotedMeasuresWithAverageSerializer(response_data, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            except ScheduledFact.DoesNotExist:
+                return Response({"detail": "No return found for the given returnId."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+class PRReviewWithDetailsView(generics.ListAPIView):
+    queryset = PRReviewTable.objects.all()
+    serializer_class = PRReviewWithDetailsSerializer
