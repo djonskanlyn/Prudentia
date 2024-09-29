@@ -23,3 +23,17 @@ class ReturnWithMeasuresSerializer(serializers.Serializer):
     source = serializers.CharField(allow_null=True)
     measure = serializers.CharField(allow_null=True)
     value = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+
+class ReturnWithPivotedMeasuresSerializer(serializers.Serializer):
+    base_return_id = serializers.IntegerField()
+    source = serializers.CharField()
+    measure = serializers.CharField()
+    current_Q0 = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    prior_Q1 = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    prior_Q2 = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    prior_Q3 = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    prior_Q4 = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    perc_diff_pq = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+    perc_diff_py = serializers.DecimalField(max_digits=15, decimal_places=2, allow_null=True)
+
+
