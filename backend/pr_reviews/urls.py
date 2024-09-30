@@ -5,7 +5,8 @@ from .views import (
     ReturnWithMeasuresView, 
     ReturnWithPivotedMeasuresView, 
     ReturnWithPivotedMeasuresWithAverageView,
-    PRReviewWithDetailsView
+    PRReviewWithDetailsView,
+    create_pr_review
 )
 
 urlpatterns = [
@@ -15,5 +16,5 @@ urlpatterns = [
     path('return-pivoted-measures/', ReturnWithPivotedMeasuresView.as_view(), name='return-pivoted-measures'),
     path('return-with-averages/', ReturnWithPivotedMeasuresWithAverageView.as_view(), name='return-with-averages'),
     path('pr-reviews-with-details/', PRReviewWithDetailsView.as_view(), name='pr-reviews-with-details'),
-
+    path('create-pr-review/', create_pr_review, name='create-pr-review'),
 ]

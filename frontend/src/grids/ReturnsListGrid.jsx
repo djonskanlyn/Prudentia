@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
+import CreateReview from '../components/CreateReview';
+import { useNavigate } from 'react-router-dom';
+
 
 const ReturnsListGrid = () => {
   const { themeClass } = useTheme();
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const columnDefs = [
     { field: 'id', headerName: 'Id', filter: true, floatingFilter: false, flex: 0.5, minWidth: 75 },
-	{ field: 'templateName', headerName: 'Template', filter: true, floatingFilter: true, flex: 1.0, minWidth: 250 },
-	{ field: 'firmName', headerName: 'Firm', filter: true, floatingFilter: true, flex: 1.0, minWidth: 250 },
+	{ field: 'firmName', headerName: 'Firm', filter: true, floatingFilter: true, flex: 1.0, minWidth: 150 },
 	{ 
 		field: 'reportingDate', 
 		headerName: 'Reporting Date', 
@@ -69,6 +72,24 @@ const ReturnsListGrid = () => {
 		  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 		},
 	  },
+	  {
+		field: 'details',
+		headerName: 'Details',
+		cellRenderer: (params) => (
+			<button className='style-button' style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }} onClick={() => navigate(`/info`)}>
+			  view
+			</button>
+		),
+		flex: 0.5,
+		minWidth: 75,
+	  },
+	  {
+		field: 'reviews',
+		headerName: 'Reviews',
+		cellRenderer: (params) => <CreateReview returnId={params.data.id} />, // Use CreateReview component
+		flex: 0.5,
+		minWidth: 75,
+	  }	  
   ];
 
   useEffect(() => {

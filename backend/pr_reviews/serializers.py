@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PRReviewTable
+from .models import PRReviewTable, PRReviewMeasure
 
 class PivotedKeyMeasureSerializer(serializers.Serializer):
     returnId = serializers.IntegerField()
@@ -62,5 +62,14 @@ class PRReviewWithDetailsSerializer(serializers.ModelSerializer):
         model = PRReviewTable
         fields = ['id', 'returnId', 'firm', 'reportingDate', 'returnState', 'returnVersion', 'created_at', 'updated_at']
 
+class PRReviewTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PRReviewTable
+        fields = ['id', 'returnId', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
 
+    def validate_returnId(self, value):
+        if not value:
+            raise serializers.ValidationError("ReturnId is required.")
+        return value
 
