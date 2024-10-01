@@ -10,7 +10,8 @@ from .serializers import (
     ReturnWithPivotedMeasuresSerializer, 
     ReturnWithPivotedMeasuresWithAverageSerializer,
     PRReviewWithDetailsSerializer,
-    PRReviewTableSerializer
+    PRReviewTableSerializer,
+    PRReviewMeasureSerializer
 )
 from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 from data.models import ScheduledFact
@@ -533,3 +534,19 @@ def create_pr_review(request):
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class PRReviewMeasuresView(APIView):
+    def get(self, request, review_id):
+        try:
+            # Fetch all measures related to the provided review_id (PRReviewTable)
+            measures = PRReviewMeasure.objects.filter(pr_review_id=review_id)
+            
+            if measures.exists():
+                # Serialize the measures data
+                serializer = PRReviewMeasureSerializer(measures, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "No measures found for this PR review."}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

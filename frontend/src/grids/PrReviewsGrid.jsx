@@ -71,13 +71,28 @@ const PrReviewsGrid = () => {
 		},
 	  },
 	  {
-      field: 'action',
-      headerName: 'Actions',
-      cellRenderer: (params) => (
-        <button className='style-button' style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }} onClick={() => navigate(`/info`)}>view details</button>
-      ),
-      flex: 0.75,
-      minWidth: 150,
+		field: 'action',
+		headerName: 'Actions',
+		cellRenderer: (params) => (
+		  <button
+			className='style-button'
+			style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }}
+			onClick={() =>
+			  navigate(`/pr-reviews-detail/${params.data.id}`, {
+				state: {
+				  firm: params.data.firm,
+				  returnId: params.data.returnId,
+				  reportingDate: params.data.reportingDate,
+				  returnState: params.data.returnState
+				},
+			  })
+			}
+		  >
+			View Details
+		  </button>
+		),
+		flex: 0.75,
+		minWidth: 150,
     },
   ];
 

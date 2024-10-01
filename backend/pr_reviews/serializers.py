@@ -73,3 +73,8 @@ class PRReviewTableSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("ReturnId is required.")
         return value
 
+
+class PRReviewMeasureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PRReviewMeasure
+        fields = '__all__'

@@ -17,11 +17,11 @@ const ReturnsListGrid = () => {
 	{ field: 'firmName', headerName: 'Firm', filter: true, floatingFilter: true, flex: 1.0, minWidth: 150 },
 	{ 
 		field: 'reportingDate', 
-		headerName: 'Reporting Date', 
+		headerName: 'Report Date', 
 		filter: true, 
 		floatingFilter: true, 
 		flex: 0.75,
-		minWidth: 150, 
+		minWidth: 125, 
 		cellRenderer: (params) => {
 			if (!params.value) return '';
 			const date = new Date(params.value);
@@ -31,65 +31,27 @@ const ReturnsListGrid = () => {
 			return `${day}/${month}/${year}`;
 		},
 	},
-	{ field: 'statusName', headerName: 'Status', filter: true, floatingFilter: false, flex: 0.5, minWidth: 150 },
+	{ field: 'statusName', headerName: 'Status', filter: true, floatingFilter: false, flex: 0.5, minWidth: 120 },
 	{ field: 'stateName', headerName: 'State', filter: true, floatingFilter: false, flex: 0.5, minWidth: 100 },
     { field: 'versionRef', headerName: 'Version', filter: true, floatingFilter: false, flex: 0.5, minWidth: 110 },
-    { 
-		field: 'firstSubmittedDatetime', 
-		headerName: 'First Submitted Datetime', 
-		filter: true, 
-		floatingFilter: false, 
-		flex: 1.0,
-		minWidth: 220, 
-		cellRenderer: (params) => {
-		  if (!params.value) return '';
-		  const date = new Date(params.value);
-		  const year = date.getUTCFullYear();
-		  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-		  const day = String(date.getUTCDate()).padStart(2, '0');
-		  const hours = String(date.getUTCHours()).padStart(2, '0');
-		  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-		  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-		  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-		},
-	  },
-	  { 
-		field: 'lastSubmittedDatetime', 
-		headerName: 'Last Submitted Datetime', 
-		filter: true, 
-		floatingFilter: false, 
-		flex: 1.0,
-		minWidth: 220, 
-		cellRenderer: (params) => {
-		  if (!params.value) return '';
-		  const date = new Date(params.value);
-		  const year = date.getUTCFullYear();
-		  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-		  const day = String(date.getUTCDate()).padStart(2, '0');
-		  const hours = String(date.getUTCHours()).padStart(2, '0');
-		  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-		  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-		  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-		},
-	  },
-	  {
-		field: 'details',
-		headerName: 'Details',
-		cellRenderer: (params) => (
-			<button className='style-button' style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }} onClick={() => navigate(`/info`)}>
-			  view
-			</button>
-		),
-		flex: 0.5,
-		minWidth: 75,
-	  },
-	  {
-		field: 'reviews',
-		headerName: 'Reviews',
-		cellRenderer: (params) => <CreateReview returnId={params.data.id} />, // Use CreateReview component
-		flex: 0.5,
-		minWidth: 75,
-	  }	  
+	{
+	field: 'details',
+	headerName: 'Details',
+	cellRenderer: (params) => (
+		<button className='style-button' style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }} onClick={() => navigate(`/info`)}>
+			view
+		</button>
+	),
+	flex: 0.5,
+	minWidth: 100,
+	},
+	{
+	field: 'reviews',
+	headerName: 'Reviews',
+	cellRenderer: (params) => <CreateReview returnId={params.data.id} />, // Use CreateReview component
+	flex: 0.5,
+	minWidth: 140,
+	}	  
   ];
 
   useEffect(() => {

@@ -20,6 +20,7 @@ import ReturnsListPage from './pages/ReturnsListPage';
 import ReturnsDetailPage from './pages/ReturnsDetailPage';
 import PrReviewsPage from './pages/PrReviewsPage';
 import PrReviewsDetailPage from './pages/PrReviewsDetailPage';
+import PrReviewsDetailsPage from './pages/PrReviewsDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
@@ -40,8 +41,8 @@ const ContentContainer = () => {
         <Route path="/home" element={<ProtectedRoute> <HomePage /> </ProtectedRoute>} />
         <Route path="/returns-list" element={<ProtectedRoute> <ReturnsListPage /> </ProtectedRoute>} />
         <Route path="/returns-detail" element={<ProtectedRoute> <ReturnsDetailPage /> </ProtectedRoute>} />
+        <Route path="/pr-reviews-detail/:reviewId" element={<ProtectedRoute> <PrReviewsDetailsPage /> </ProtectedRoute>} />
         <Route path="/pr-reviews" element={<ProtectedRoute> <PrReviewsPage /> </ProtectedRoute>} />
-        <Route path="/pr-reviews-detail/:reviewId" element={<ProtectedRoute> <PrReviewsDetailPage /> </ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
         <Route path="/info" element={<ProtectedRoute> <InfoPage /> </ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute> <ContactPage /> </ProtectedRoute>} />
