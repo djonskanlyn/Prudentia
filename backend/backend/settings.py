@@ -150,7 +150,7 @@ if not DEBUG:  # Only use in production
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#CORS_ORIGIN_ALLOW_ALL = True # allow requests from all domains
+CORS_ORIGIN_ALLOW_ALL = True # allow requests from all domains
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000','https://prudentia.onrender.com'
