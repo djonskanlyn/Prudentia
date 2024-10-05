@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Create an axios instance with a base URL
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api/', // API's base URL
+  baseURL: 'https://prudentiaapi.onrender.com/api/', // API's base URL
+  //baseURL: 'http://localhost:8000/api/',
 });
 
 // Request interceptor to include token in headers
