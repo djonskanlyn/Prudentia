@@ -1,4 +1,5 @@
 import requests
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -481,6 +482,7 @@ class PRReviewWithDetailsView(generics.ListAPIView):
     serializer_class = PRReviewWithDetailsSerializer
 
 @api_view(['POST'])
+@csrf_exempt
 def create_pr_review(request):
     try:
         # Get the `returnId` and `baseURL` from the request data
