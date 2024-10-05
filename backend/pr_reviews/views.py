@@ -1,5 +1,4 @@
 import requests
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -482,15 +481,14 @@ class PRReviewWithDetailsView(generics.ListAPIView):
     serializer_class = PRReviewWithDetailsSerializer
 
 @api_view(['POST'])
-@csrf_exempt
 def create_pr_review(request):
     try:
-        # Get the `returnId` and `baseURL` from the request data
+        # Get the `returnId` from the request data
         return_id = request.data.get('returnId')
-        base_url = request.data.get('baseURL')
 
-        if not base_url:
-            return Response({'error': 'Base URL is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if `returnId` is provided
+        if not return_id:
+            return Response({'error': 'Return ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Fetch the ScheduledFact instance using return_id
         return_instance = ScheduledFact.objects.get(id=return_id)
@@ -502,8 +500,8 @@ def create_pr_review(request):
         # Create a new PRReviewTable instance
         pr_review = PRReviewTable.objects.create(returnId=return_instance)
 
-        # Append 'return-with-averages/' to the base URL and fetch measure data
-        measure_response = requests.get(f'{base_url}pr-reviews/return-with-averages/?returnId={return_id}')
+        # Fetch measures from an internal API endpoint
+        measure_response = requests.get(f'https://prudentiaapi.onrender.com/api/pr-reviews/return-with-averages/?returnId={return_id}')
         
         if measure_response.status_code != 200:
             return Response({'error': 'Error fetching measures from the API.'}, status=status.HTTP_400_BAD_REQUEST)
