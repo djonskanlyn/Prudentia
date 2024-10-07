@@ -277,6 +277,7 @@ class ReturnWithMeasuresView(APIView):
         
         return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ReturnWithPivotedMeasuresView(APIView):
     """
     API View to get the base returnId and pivot out the values for the current quarter and the previous four quarters.
@@ -368,12 +369,96 @@ class ReturnWithPivotedMeasuresView(APIView):
 
         return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+
+def get_pivoted_measures_with_averages(return_id):
+    """
+    Fetch pivoted key measures with averages for a specific returnId.
+    """
+
+    try:
+        # Fetch the base return object
+        base_return = ScheduledFact.objects.get(id=return_id, state_id=1)
+
+        # Get the flattened structure for the previous four quarters, including the base return
+        previous_quarters = get_flattened_return_and_previous_quarters(base_return)
+
+        pivoted_data = {}
+
+        # Iterate over each quarter and get key measures
+        for idx, quarter_data in enumerate(previous_quarters):
+            sub_return_id = quarter_data["sub_returnId"]
+
+            if sub_return_id:
+                # Fetch key measures for the quarter
+                key_measures = pivot_all_key_measures(sub_return_id)
+
+                # Pivot data for each measure
+                for measure in key_measures:
+                    measure_key = (measure["source"], measure["measureId"])  # Using measureId for consistency
+
+                    # Initialize if the measure is not yet in the pivoted_data
+                    if measure_key not in pivoted_data:
+                        pivoted_data[measure_key] = {
+                            "base_return_id": return_id,
+                            "source": measure["source"],
+                            "measure": measure["measure"],
+                            "current_Q0": None, "prior_Q1": None, "prior_Q2": None,
+                            "prior_Q3": None, "prior_Q4": None,
+                            "perc_diff_pq": None,  # Initialize as None
+                            "perc_diff_py": None,   # Initialize as None
+                            "average": None         # New field for average
+                        }
+
+                    # Assign the measure's value to the respective quarter (Q0 to Q4)
+                    if idx == 0:
+                        pivoted_data[measure_key]["current_Q0"] = measure["value"]
+                    elif idx == 1:
+                        pivoted_data[measure_key]["prior_Q1"] = measure["value"]
+                    elif idx == 2:
+                        pivoted_data[measure_key]["prior_Q2"] = measure["value"]
+                    elif idx == 3:
+                        pivoted_data[measure_key]["prior_Q3"] = measure["value"]
+                    elif idx == 4:
+                        pivoted_data[measure_key]["prior_Q4"] = measure["value"]
+
+        # Calculate percentage differences and fetch the average values
+        for measure_key, data in pivoted_data.items():
+            current_Q0 = data.get("current_Q0")
+            prior_Q1 = data.get("prior_Q1")
+            prior_Q4 = data.get("prior_Q4")
+
+            # Calculate perc_diff_pq ((current_Q0 - prior_Q1) / prior_Q1) * 100
+            if current_Q0 is not None and prior_Q1 is not None and prior_Q1 != 0:
+                data["perc_diff_pq"] = ((current_Q0 - prior_Q1) / prior_Q1) * 100
+            else:
+                data["perc_diff_pq"] = None
+
+            # Calculate perc_diff_py ((current_Q0 - prior_Q4) / prior_Q4) * 100
+            if current_Q0 is not None and prior_Q4 is not None and prior_Q4 != 0:
+                data["perc_diff_py"] = ((current_Q0 - prior_Q4) / prior_Q4) * 100
+            else:
+                data["perc_diff_py"] = None
+
+            # Fetch the average for the measure from AverageKeyMeasure table using source, measureId and quarter_ref
+            average_obj = AverageKeyMeasure.objects.filter(
+                quarter_ref=base_return.quarterRef,  # Use the base quarterRef for averages
+                source=data["source"],
+                measure_id=measure_key[1]  # Use the measureId from the pivot data
+            ).first()
+
+            if average_obj:
+                data["average"] = average_obj.average_value
+            else:
+                data["average"] = None
+
+        # Return the pivoted data in list format
+        return list(pivoted_data.values())
+
+    except ScheduledFact.DoesNotExist:
+        raise ValueError('ScheduledFact not found')
+
+
 class ReturnWithPivotedMeasuresWithAverageView(APIView):
-    """
-    API View to get the base returnId, pivot out the values for the current quarter and the previous four quarters,
-    and also calculate the average for each measure based on the quarterRef.
-    Fields: base_return_id, source, measure, current_Q0, prior_Q1, prior_Q2, prior_Q3, prior_Q4, perc_diff_pq, perc_diff_py, average.
-    """
 
     return_id_param = openapi.Parameter(
         'returnId', openapi.IN_QUERY, description="Return Id to filter by", type=openapi.TYPE_INTEGER
@@ -389,92 +474,18 @@ class ReturnWithPivotedMeasuresWithAverageView(APIView):
 
         if return_id:
             try:
-                # Fetch the base return object
-                base_return = ScheduledFact.objects.get(id=return_id, state_id=1)
-
-                # Get the flattened structure for the previous four quarters, including the base return
-                previous_quarters = get_flattened_return_and_previous_quarters(base_return)
-
-                pivoted_data = {}
-
-                # Iterate over each quarter and get key measures
-                for idx, quarter_data in enumerate(previous_quarters):
-                    sub_return_id = quarter_data["sub_returnId"]
-
-                    if sub_return_id:
-                        # Fetch key measures for the quarter
-                        key_measures = pivot_all_key_measures(sub_return_id)
-
-                        # Pivot data for each measure
-                        for measure in key_measures:
-                            measure_key = (measure["source"], measure["measureId"])  # Using measureId for consistency
-
-                            # Initialize if the measure is not yet in the pivoted_data
-                            if measure_key not in pivoted_data:
-                                pivoted_data[measure_key] = {
-                                    "base_return_id": return_id,
-                                    "source": measure["source"],
-                                    "measure": measure["measure"],
-                                    "current_Q0": None, "prior_Q1": None, "prior_Q2": None,
-                                    "prior_Q3": None, "prior_Q4": None,
-                                    "perc_diff_pq": None,  # Initialize as None
-                                    "perc_diff_py": None,   # Initialize as None
-                                    "average": None         # New field for average
-                                }
-
-                            # Assign the measure's value to the respective quarter (Q0 to Q4)
-                            if idx == 0:
-                                pivoted_data[measure_key]["current_Q0"] = measure["value"]
-                            elif idx == 1:
-                                pivoted_data[measure_key]["prior_Q1"] = measure["value"]
-                            elif idx == 2:
-                                pivoted_data[measure_key]["prior_Q2"] = measure["value"]
-                            elif idx == 3:
-                                pivoted_data[measure_key]["prior_Q3"] = measure["value"]
-                            elif idx == 4:
-                                pivoted_data[measure_key]["prior_Q4"] = measure["value"]
-
-                # Calculate percentage differences and fetch the average values
-                for measure_key, data in pivoted_data.items():
-                    current_Q0 = data.get("current_Q0")
-                    prior_Q1 = data.get("prior_Q1")
-                    prior_Q4 = data.get("prior_Q4")
-
-                    # Calculate perc_diff_pq ((current_Q0 - prior_Q1) / prior_Q1) * 100
-                    if current_Q0 is not None and prior_Q1 is not None and prior_Q1 != 0:
-                        data["perc_diff_pq"] = ((current_Q0 - prior_Q1) / prior_Q1) * 100
-                    else:
-                        data["perc_diff_pq"] = None
-
-                    # Calculate perc_diff_py ((current_Q0 - prior_Q4) / prior_Q4) * 100
-                    if current_Q0 is not None and prior_Q4 is not None and prior_Q4 != 0:
-                        data["perc_diff_py"] = ((current_Q0 - prior_Q4) / prior_Q4) * 100
-                    else:
-                        data["perc_diff_py"] = None
-
-                    # Fetch the average for the measure from AverageKeyMeasure table using source, measureId and quarter_ref
-                    average_obj = AverageKeyMeasure.objects.filter(
-                        quarter_ref=base_return.quarterRef,  # Use the base quarterRef for averages
-                        source=data["source"],
-                        measure_id=measure_key[1]  # Use the measureId from the pivot data
-                    ).first()
-
-                    if average_obj:
-                        data["average"] = average_obj.average_value
-                    else:
-                        data["average"] = None
-
-                # Convert pivoted_data to a list for serialization
-                response_data = list(pivoted_data.values())
+                # Use the helper function to fetch the measures
+                pivoted_data = get_pivoted_measures_with_averages(return_id)
 
                 # Return serialized response
-                serializer = ReturnWithPivotedMeasuresWithAverageSerializer(response_data, many=True)
+                serializer = ReturnWithPivotedMeasuresWithAverageSerializer(pivoted_data, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
-            except ScheduledFact.DoesNotExist:
-                return Response({"detail": "No return found for the given returnId."}, status=status.HTTP_404_NOT_FOUND)
+            except ValueError as e:
+                return Response({"detail": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({"detail": "returnId query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PRReviewWithDetailsView(generics.ListAPIView):
     queryset = PRReviewTable.objects.all()
@@ -500,13 +511,11 @@ def create_pr_review(request):
         # Create a new PRReviewTable instance
         pr_review = PRReviewTable.objects.create(returnId=return_instance)
 
-        # Fetch measures from an internal API endpoint
-        measure_response = requests.get(f'https://prudentiaapi.onrender.com/api/pr-reviews/return-with-averages/?returnId={return_id}')
+        # Fetch pivoted measures directly (without HTTP request)
+        measure_data = get_pivoted_measures_with_averages(return_id)
         
-        if measure_response.status_code != 200:
-            return Response({'error': 'Error fetching measures from the API.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        measure_data = measure_response.json()
+        if not measure_data:
+            return Response({'error': 'No measures found for this return ID.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create PRReviewMeasure entries for the created PRReviewTable
         for measure in measure_data:
