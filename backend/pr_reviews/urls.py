@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import (
     KeyMeasuresLongFormatView, 
     ReturnAndPreviousQuartersView, 
@@ -10,7 +11,11 @@ from .views import (
     create_pr_review
 )
 
+# Add a DRF DefaultRouter for a browsable REST page
+router = DefaultRouter()
+
 urlpatterns = [
+    path('', include(router.urls)),  # This will handle the default /api/pr-reviews/ page
     path('key-measures/', KeyMeasuresLongFormatView.as_view(), name='key-measures-long-format'),
     path('return-previous/', ReturnAndPreviousQuartersView.as_view(), name='return-previous'),
     path('return-with-measures/', ReturnWithMeasuresView.as_view(), name='return-with-measures'),

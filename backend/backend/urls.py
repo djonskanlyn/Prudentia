@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .schema import schema_view, redoc_view
+from .schema import schema_view
 
 urlpatterns = [
     path('admin/', (admin.site.urls)),
@@ -11,5 +11,5 @@ urlpatterns = [
 
     # Add Swagger documentation URLs
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', redoc_view, name='schema-redoc'),  # Protect ReDoc URL
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
