@@ -26,7 +26,6 @@ import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
 
-
 // ContentContainer handles the routes and theme class for the content area
 const ContentContainer = () => {
   const { isDarkTheme } = useTheme();
