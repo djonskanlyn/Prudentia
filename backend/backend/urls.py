@@ -4,7 +4,6 @@ from .schema import schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('tasks.urls')),
     path('api/', include('authapp.urls')),
     path('api/data/', include('data.urls')),
     path('api/key-measures/', include('key_measures.urls')),

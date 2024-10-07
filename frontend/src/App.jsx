@@ -25,7 +25,7 @@ import ProfilePage from './pages/ProfilePage';
 import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
-import TaskApp from './task_app/TaskApp';
+
 
 // ContentContainer handles the routes and theme class for the content area
 const ContentContainer = () => {
@@ -37,7 +37,6 @@ const ContentContainer = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/tasks" element={<ProtectedRoute> <TaskApp /> </ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute> <HomePage /> </ProtectedRoute>} />
         <Route path="/returns-list" element={<ProtectedRoute> <ReturnsListPage /> </ProtectedRoute>} />
         <Route path="/returns-detail" element={<ProtectedRoute> <ReturnsDetailPage /> </ProtectedRoute>} />

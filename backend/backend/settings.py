@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('PRUDENTIA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1','localhost','prudentiaapi.onrender.com'
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     # Prudentia apps
-    'tasks',
     'authapp',
     'data',
     'key_measures',
@@ -149,8 +148,6 @@ if not DEBUG:  # Only use in production
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CORS_ORIGIN_ALLOW_ALL = True # allow requests from all domains
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000','https://prudentia.onrender.com'
