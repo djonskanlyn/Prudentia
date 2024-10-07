@@ -1,7 +1,8 @@
 """
 This file defines the schema view for Swagger documentation.
 """
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -15,5 +16,8 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(IsAuthenticated,),
 )
+
+# Protect ReDoc with login_required
+redoc_view = login_required(schema_view.with_ui('redoc', cache_timeout=0))
