@@ -3,6 +3,7 @@ This file defines the schema view for Swagger documentation.
 """
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -14,7 +15,7 @@ schema_view = get_schema_view(
         description="API documentation for Prudentia",
         contact=openapi.Contact(email="johnscanlon104@gmail.com"),
     ),
-    public=False,  # Set public=False so authentication is required
-    permission_classes=(IsAuthenticated,),  # Require authentication
-    authentication_classes=(SessionAuthentication),  # Use session-based authentication
+    public=False,
+    permission_classes=(IsAuthenticated,),
+    authentication_classes=(SessionAuthentication, JWTAuthentication),
 )
