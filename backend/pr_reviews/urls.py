@@ -20,3 +20,5 @@ urlpatterns = [
     path('create-pr-review/', create_pr_review, name='create-pr-review'),
     path('pr-reviews-details/<int:review_id>/', PRReviewMeasuresView.as_view(), name='pr-review-details'),
 ]
+
+

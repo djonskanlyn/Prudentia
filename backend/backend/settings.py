@@ -175,6 +175,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # Enforces authentication by default
     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',  # For JSON responses
+        'rest_framework.renderers.BrowsableAPIRenderer',  # For the browsable API
+    ),
 }
 
 
