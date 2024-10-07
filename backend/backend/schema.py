@@ -16,5 +16,5 @@ schema_view = get_schema_view(
     ),
     public=False,  # Set public=False so authentication is required
     permission_classes=(IsAuthenticated,),  # Require authentication
-    authentication_classes=(SessionAuthentication,),  # Use session-based authentication
+    authentication_classes=(SessionAuthentication),  # Use session-based authentication
 )
