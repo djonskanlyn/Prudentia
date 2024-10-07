@@ -18,10 +18,6 @@ urlpatterns = [
     path('api/key-measures/', include('key_measures.urls')),
     path('api/pr-reviews/', include('pr_reviews.urls')),
 
-    # Add Swagger documentation URLs
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-
     # Swagger UI - restricted to superusers only
     path('swagger/', superuser_required(schema_view.with_ui('swagger', cache_timeout=0)), name='schema-swagger-ui'),
 
