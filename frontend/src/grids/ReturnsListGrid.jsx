@@ -35,17 +35,6 @@ const ReturnsListGrid = () => {
 	{ field: 'stateName', headerName: 'State', filter: true, floatingFilter: false, flex: 0.5, minWidth: 100 },
     { field: 'versionRef', headerName: 'Version', filter: true, floatingFilter: false, flex: 0.5, minWidth: 110 },
 	{
-	field: 'details',
-	headerName: 'Details',
-	cellRenderer: (params) => (
-		<button className='style-button' style={{ padding: '0.2rem 0.4rem', fontSize: '0.8rem', lineHeight: '1.2' }} onClick={() => navigate(`/info`)}>
-			view
-		</button>
-	),
-	flex: 0.5,
-	minWidth: 100,
-	},
-	{
 	field: 'reviews',
 	headerName: 'Reviews',
 	cellRenderer: (params) => <CreateReview returnId={params.data.id} />, // Use CreateReview component
