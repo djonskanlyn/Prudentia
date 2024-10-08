@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { FaHome, FaUser, FaSignOutAlt, FaList, FaBell, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
+import { FaHome, FaSignOutAlt, FaList, FaBell, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,7 +19,6 @@ import HomePage from './pages/HomePage';
 import ReturnsListPage from './pages/ReturnsListPage';
 import ReturnsDetailPage from './pages/ReturnsDetailPage';
 import PrReviewsPage from './pages/PrReviewsPage';
-import PrReviewsDetailPage from './pages/PrReviewsDetailPage';
 import PrReviewsDetailsPage from './pages/PrReviewsDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import InfoPage from './pages/InfoPage';
@@ -68,7 +67,6 @@ const AppContent = () => {
       {/* bottom navbar */}
       <nav className="navbar-bottom">
         <div className="top-bottom-navbar-icons">
-          <Link to="/profile" className="nav-icon" data-tooltip="Profile"> <FaUser size={24} /> </Link>
           <Link to="/info" className="nav-icon" data-tooltip="Info"> <FaInfoCircle size={24} /> </Link>
           <Link to="/contact" className="nav-icon" data-tooltip="Contact"> <FaEnvelope size={24} /> </Link>
         </div>

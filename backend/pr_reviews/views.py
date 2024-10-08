@@ -10,7 +10,8 @@ from .serializers import (
     ReturnWithPivotedMeasuresWithAverageSerializer,
     PRReviewWithDetailsSerializer,
     PRReviewTableSerializer,
-    PRReviewMeasureSerializer
+    PRReviewMeasureSerializer,
+    MeasureCommentsSerializer,
 )
 from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 from data.models import ScheduledFact
@@ -558,3 +559,16 @@ class PRReviewMeasuresView(APIView):
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def update_measure_comments(request, pk):
+    try:
+        review = PRReviewMeasure.objects.get(pk=pk)
+    except PRReviewMeasure.DoesNotExist:
+        return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = MeasureCommentsSerializer(review, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'success': 'Comment updated successfully'}, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

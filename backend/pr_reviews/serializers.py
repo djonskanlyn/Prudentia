@@ -78,3 +78,8 @@ class PRReviewMeasureSerializer(serializers.ModelSerializer):
     class Meta:
         model = PRReviewMeasure
         fields = '__all__'
+
+class MeasureCommentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PRReviewMeasure
+        fields = ['id', 'comments'] 

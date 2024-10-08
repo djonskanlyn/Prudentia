@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { useTheme } from '../components/ThemeContext';
-import { fetchData } from '../components/FetchData';
+import { fetchData, updateData } from '../components/FetchData';
 import { useParams } from 'react-router-dom';
 
-const CapitalKeyMeasuresGrid = () => { // Updated the name to better reflect the content
+const CapitalKeyMeasuresGrid = () => { 
   const { themeClass } = useTheme();
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
-  const { reviewId } = useParams(); // Extract the reviewId from the URL
+  const { reviewId } = useParams();
+
+  const updateMeasureComments = async (updatedData) => {
+    try {
+      const response = await updateData(`pr-reviews/update-measure-comments/${updatedData.id}/`, {
+        comments: updatedData.comments, // Only pass the comments data
+      });
+
+      console.log('Comment updated successfully', response);
+    } catch (err) {
+      setError('Failed to update comment: ' + err.message); // Handle the error
+    }
+  };
+
+  const onCellValueChanged = (event) => {
+    if (event.colDef.field === 'comments') {
+      updateMeasureComments(event.data);
+    }
+  };
 
   const columnDefs = [
     { 
@@ -220,7 +238,8 @@ const CapitalKeyMeasuresGrid = () => { // Updated the name to better reflect the
       try {
         const data = await fetchData(`pr-reviews/pr-reviews-details/${reviewId}/`); // Fetch the data based on reviewId
         const filteredData = data.filter(row => row.source === 'capital'); // Filter for 'capital' measures only
-        setRowData(filteredData); // Set the filtered data
+        const sortedData = filteredData.sort((a, b) => a.id - b.id); 
+        setRowData(sortedData); // Set the filtered data
       } catch (err) {
         setError(err.message); // Handle errors gracefully
       }
@@ -232,17 +251,6 @@ const CapitalKeyMeasuresGrid = () => { // Updated the name to better reflect the
   }, [reviewId]); // Include reviewId in the dependency array to refetch data when it changes
 
 
-  const handleCellValueChange = async (params) => {
-    if (params.colDef.field === 'comments') {
-      try {
-        await saveCommentUpdate(params.data); // Implement the API call to save the comment
-        console.log('Comment updated:', params.data);
-      } catch (error) {
-        console.error('Failed to save comment:', error);
-      }
-    }
-  };
-
   return (
     <div className={themeClass} style={{ width: '100%' }}>
       {error && <div>Error: {error}</div>}
@@ -252,7 +260,7 @@ const CapitalKeyMeasuresGrid = () => { // Updated the name to better reflect the
         columnDefs={columnDefs}
         pagination={false}
         domLayout='autoHeight'
-        onCellValueChanged={handleCellValueChange}
+        onCellValueChanged={onCellValueChanged} // Add this event listener
       />
     </div>
   );
