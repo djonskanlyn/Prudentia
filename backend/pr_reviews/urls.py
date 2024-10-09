@@ -25,7 +25,7 @@ urlpatterns = [
     path('pr-reviews-with-details/', PRReviewWithDetailsView.as_view(), name='pr-reviews-with-details'),
     path('create-pr-review/', create_pr_review, name='create-pr-review'),
     path('pr-reviews-details/<int:review_id>/', PRReviewMeasuresView.as_view(), name='pr-review-details'),
-    path('update-measure-comments/<int:pk>/', update_measure_comments, name='update-measure-comments')
+    path('update-measure-comments/<int:pk>/', update_measure_comments, name='update-measure-comments'),
 ]
 
 

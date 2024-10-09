@@ -572,3 +572,4 @@ def update_measure_comments(request, pk):
         serializer.save()
         return Response({'success': 'Comment updated successfully'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

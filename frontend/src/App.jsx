@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { FaHome, FaSignOutAlt, FaList, FaBell, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
+import { FaHome, FaSignOutAlt, FaList, FaFileContract, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -77,9 +77,9 @@ const AppContent = () => {
       <nav className="navbar-left">
         <div className="nav-icon hidden-placeholder"></div>
         <Link to="/home" className="nav-icon" data-tooltip="Home"> <FaHome size={24} /> </Link>
-        <Link to="/returns-list" className="nav-icon" data-tooltip="Returns List"> <FaList size={24} /> </Link>
         <Link to="/returns-detail" className="nav-icon" data-tooltip="Returns Detail"> <FaMagnifyingGlass size={24} /> </Link>
-        <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews"> <FaBell size={24} /> </Link>
+        <Link to="/returns-list" className="nav-icon" data-tooltip="Returns List"> <FaList size={24} /> </Link>
+        <Link to="/pr-reviews" className="nav-icon" data-tooltip="PR Reviews List"> <FaFileContract size={24} /> </Link>
       </nav>
 
       {/* right navbar */}

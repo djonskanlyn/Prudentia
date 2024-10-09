@@ -4,7 +4,7 @@ import { useTheme } from '../components/ThemeContext';
 import { fetchData, updateData } from '../components/FetchData';
 import { useParams } from 'react-router-dom';
 
-const CapitalKeyMeasuresGrid = () => { 
+const LiquidityKeyMeasuresGrid = () => { 
   const { themeClass } = useTheme();
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
@@ -237,7 +237,7 @@ const CapitalKeyMeasuresGrid = () => {
     const fetchGridData = async () => {
       try {
         const data = await fetchData(`pr-reviews/pr-reviews-details/${reviewId}/`); // Fetch the data based on reviewId
-        const filteredData = data.filter(row => row.source === 'capital'); // Filter for 'capital' measures only
+        const filteredData = data.filter(row => row.source === 'liquidity'); // Filter for 'liqudity' measures only
         const sortedData = filteredData.sort((a, b) => a.id - b.id); 
         setRowData(sortedData); // Set the filtered data
       } catch (err) {
@@ -266,4 +266,4 @@ const CapitalKeyMeasuresGrid = () => {
   );
 };
 
-export default CapitalKeyMeasuresGrid;
+export default LiquidityKeyMeasuresGrid;
