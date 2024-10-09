@@ -21,9 +21,9 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post('http://localhost:8000/api/register/', formData);
-      //const response = await axios.post('https://prudentiaapi.onrender.com/api/register/', formData);
-      const response = await axios.post(`${import.meta.env.VITE_PRUDENTIA_API_BASE_URL}register/`, formData);
+      const response = await axios.post('http://localhost:8000/api/register/', formData);
+      // const response = await axios.post('https://prudentiaapi.onrender.com/api/register/', formData);
+      // const response = await axios.post(`${import.meta.env.VITE_PRUDENTIA_API_BASE_URL}register/`, formData);
       console.log('Registration successful:', response.data);
       navigate('/login');
     } catch (error) {

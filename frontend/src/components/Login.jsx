@@ -21,9 +21,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post('http://localhost:8000/api/token/', formData);
-      //const response = await axios.post('https://prudentiaapi.onrender.com/api/token/', formData);
-      const response = await axios.post(`${import.meta.env.VITE_PRUDENTIA_API_BASE_URL}token/`, formData);
+      const response = await axios.post('http://localhost:8000/api/token/', formData);
+      // const response = await axios.post('https://prudentiaapi.onrender.com/api/token/', formData);
+      // const response = await axios.post(`${import.meta.env.VITE_PRUDENTIA_API_BASE_URL}token/`, formData);
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       console.log('Login successful:', response.data);
