@@ -70,8 +70,8 @@ function Login() {
 
           <div className="mt-3 text-center">
             <p>Don't have an account? <Link to="/register">Register</Link></p>
-            {/* <p>Forgot password? <a href="http://localhost:8000/api/password-reset/">Reset Password</a></p> */}
-            <p>Forgot password? <a href="https://prudentiaapi.onrender.com/api/password-reset/">Reset Password</a></p>
+            <p>Forgot password? <a href="http://localhost:8000/api/password-reset/">Reset Password</a></p>
+            {/* <p>Forgot password? <a href="https://prudentiaapi.onrender.com/api/password-reset/">Reset Password</a></p> */}
           </div>
         </form>
       </div>
