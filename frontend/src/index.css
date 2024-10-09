@@ -244,6 +244,11 @@ html, body {
   font-weight: bold;
 }
 
+.grid-page h5 {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
 .grid-container {
   flex: 1;
   display: flex;
@@ -255,6 +260,7 @@ html, body {
 .grid-item {
   margin-bottom: 20px;  /* Adds space below each grid */
 }
+
 
 
 /* ########################### */
@@ -613,3 +619,17 @@ html, body {
 }
 
 
+.pr-review-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.pr-review-header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.pr-review-header h2 {
+  font-size: 20px;
+  margin: 5px 0;
+}

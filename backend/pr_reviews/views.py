@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework.generics import RetrieveUpdateAPIView
 from .serializers import (
     PivotedKeyMeasureSerializer, 
     ReturnPreviousSerializer, 
@@ -573,3 +574,10 @@ def update_measure_comments(request, pk):
         return Response({'success': 'Comment updated successfully'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PRReviewTableDetailView(RetrieveUpdateAPIView):
+    queryset = PRReviewTable.objects.all()
+    serializer_class = PRReviewTableSerializer
+
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True  # Allows partial updates
+        return super().update(request, *args, **kwargs)

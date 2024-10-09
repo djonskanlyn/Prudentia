@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import dj_database_url
 import os
 
@@ -25,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('PRUDENTIA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-# FRONTEND_URL = 'http://localhost:3000/'
-FRONTEND_URL = 'https://prudentia.onrender.com/'
+FRONTEND_URL = 'http://localhost:3000/'
+# FRONTEND_URL = 'https://prudentia.onrender.com/'
 
 ALLOWED_HOSTS = [
     '127.0.0.1','localhost','prudentiaapi.onrender.com'
@@ -198,6 +199,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Access token expires in 5 minutes
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Refresh token expires in 7 days
 }
 
 # ===================

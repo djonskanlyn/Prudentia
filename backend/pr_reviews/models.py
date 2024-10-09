@@ -6,6 +6,13 @@ class PRReviewTable(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Adding large text fields for comments
+    capital_comment = models.TextField(null=True, blank=True)
+    liquidity_comment = models.TextField(null=True, blank=True)
+    investments_comment = models.TextField(null=True, blank=True)
+    credit_comment = models.TextField(null=True, blank=True)
+    final_comment = models.TextField(null=True, blank=True)
+
     def __str__(self):
         return f"PRReview for Return Id {self.returnId.id}"
     

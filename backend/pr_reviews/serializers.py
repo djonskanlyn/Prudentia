@@ -65,14 +65,13 @@ class PRReviewWithDetailsSerializer(serializers.ModelSerializer):
 class PRReviewTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = PRReviewTable
-        fields = ['id', 'returnId', 'created_at', 'updated_at']
+        fields = ['id', 'returnId', 'created_at', 'updated_at', 'capital_comment', 'liquidity_comment', 'investments_comment', 'credit_comment', 'final_comment']
         read_only_fields = ['created_at', 'updated_at']
 
     def validate_returnId(self, value):
         if not value:
             raise serializers.ValidationError("ReturnId is required.")
         return value
-
 
 class PRReviewMeasureSerializer(serializers.ModelSerializer):
     class Meta:
