@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { updateData } from '../components/FetchData';  
-import { useTheme } from '../components/ThemeContext';  // Assuming you have a ThemeContext set up
+import { useTheme } from '../components/ThemeContext';  
 
 const PRReviewSignOffButtons = ({ supervisorSignOff, seniorSupervisorSignOff }) => {
   const { reviewId } = useParams();  // Get reviewId from URL params
@@ -15,13 +15,13 @@ const PRReviewSignOffButtons = ({ supervisorSignOff, seniorSupervisorSignOff }) 
       const response = await updateData(`pr-reviews/supervisor-signoff/${reviewId}/`, {});
       alert('Supervisor signed off successfully!');  // Success alert
     } catch (err) {
-      // Check for specific error status codes
-      if (err.response && err.response.status === 404) {
-        alert('Error 404: Review not found.');
-      } else if (err.response && err.response.status === 403) {
-        alert('Error 403: Supervisor sign-off already completed.');
+      // Check for specific error status codes and show the appropriate error message
+      if (err.response) {
+        // Handle the error response from the backend
+        alert(`Error: ${err.response.status} - ${err.response.data.error}`);
       } else {
-        alert('Failed to sign off: ' + (err.response?.data?.error || 'Unknown error.'));
+        // If no response (network or unknown error)
+        alert('Failed to sign off: An unexpected error occurred.');
       }
     }
   };
@@ -32,13 +32,13 @@ const PRReviewSignOffButtons = ({ supervisorSignOff, seniorSupervisorSignOff }) 
       const response = await updateData(`pr-reviews/senior-supervisor-signoff/${reviewId}/`, {});
       alert('Senior Supervisor signed off successfully!');  // Success alert
     } catch (err) {
-      // Check for specific error status codes
-      if (err.response && err.response.status === 404) {
-        alert('Error 404: Review not found.');
-      } else if (err.response && err.response.status === 403) {
-        alert('Error 403: Senior supervisor sign-off already completed or supervisor must sign off first.');
+      // Check for specific error status codes and show the appropriate error message
+      if (err.response) {
+        // Handle the error response from the backend
+        alert(`Error: ${err.response.status} - ${err.response.data.error}`);
       } else {
-        alert('Failed to sign off: ' + (err.response?.data?.error || 'Unknown error.'));
+        // If no response (network or unknown error)
+        alert('Failed to sign off: An unexpected error occurred.');
       }
     }
   };
