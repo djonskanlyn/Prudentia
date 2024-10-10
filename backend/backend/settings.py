@@ -26,11 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('PRUDENTIA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
-# FRONTEND_URL = 'http://localhost:3000/'
-FRONTEND_URL = 'https://prudentia.onrender.com/'
+FRONTEND_URL = 'http://localhost:3000/'
+# FRONTEND_URL = 'https://prudentia.onrender.com/'
 
 ALLOWED_HOSTS = [
     '127.0.0.1','localhost','prudentiaapi.onrender.com'
