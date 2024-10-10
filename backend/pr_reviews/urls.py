@@ -12,7 +12,8 @@ from .views import (
     update_measure_comments,
     PRReviewTableDetailView,
     supervisor_signoff, 
-    senior_supervisor_signoff
+    senior_supervisor_signoff,
+    get_dashboard_data
 )
 
 # Add a DRF DefaultRouter for a browsable REST page
@@ -32,6 +33,7 @@ urlpatterns = [
     path('pr-reviews-with-comments/<int:pk>/', PRReviewTableDetailView.as_view(), name='pr-reviews-with-comments'),
     path('supervisor-signoff/<int:review_id>/', supervisor_signoff, name='supervisor_signoff'),
     path('senior-supervisor-signoff/<int:review_id>/', senior_supervisor_signoff, name='senior_supervisor_signoff'),
+    path('dashboard-data/', get_dashboard_data, name='dashboard-data'),
 ]
 
 

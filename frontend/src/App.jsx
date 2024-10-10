@@ -20,7 +20,6 @@ import ReturnsListPage from './pages/ReturnsListPage';
 import ReturnsDetailPage from './pages/ReturnsDetailPage';
 import PrReviewsPage from './pages/PrReviewsPage';
 import PrReviewsDetailsPage from './pages/PrReviewsDetailsPage';
-import ProfilePage from './pages/ProfilePage';
 import InfoPage from './pages/InfoPage';
 import ContactPage from './pages/ContactPage';
 
@@ -40,7 +39,6 @@ const ContentContainer = () => {
         <Route path="/returns-detail" element={<ProtectedRoute> <ReturnsDetailPage /> </ProtectedRoute>} />
         <Route path="/pr-reviews-detail/:reviewId" element={<ProtectedRoute> <PrReviewsDetailsPage /> </ProtectedRoute>} />
         <Route path="/pr-reviews" element={<ProtectedRoute> <PrReviewsPage /> </ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
         <Route path="/info" element={<ProtectedRoute> <InfoPage /> </ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute> <ContactPage /> </ProtectedRoute>} />
         <Route path="*" element={<NotFound />} /> {/* Catch-all for invalid URLs */}

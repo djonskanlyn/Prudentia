@@ -82,3 +82,10 @@ class MeasureCommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PRReviewMeasure
         fields = ['id', 'comments'] 
+
+class DashboardDataSerializer(serializers.Serializer):
+    reportingDate = serializers.DateField()
+    total_returns = serializers.IntegerField()
+    submitted_returns = serializers.IntegerField()
+    supervisor_signoffs = serializers.IntegerField()
+    senior_supervisor_signoffs = serializers.IntegerField()

@@ -633,3 +633,46 @@ html, body {
   font-size: 20px;
   margin: 5px 0;
 }
+
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns: 50% width each */
+  grid-template-rows: auto auto;   /* Rows adjust to content height */
+  gap: 20px;                      /* Spacing between grid items */
+  height: auto;                   /* Allow the grid height to adjust automatically */
+  width: 100%;                    /* Full width of the container */
+}
+
+.dashboard-item {
+  padding: 20px;
+  border: 1px solid #6E6E6E;      /* Border for separating sections */
+  border-radius: 10px;
+  max-height: 375px;              /* Limit the maximum height */
+  min-height: 300px;              /* Limit the maximum height */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto; /* Add horizontal scroll here */
+  overflow-y: auto;
+}
+
+.top-left {
+  grid-area: 1 / 1 / 2 / 2; /* Row 1, Column 1 */
+}
+
+.top-right {
+  grid-area: 1 / 2 / 2 / 3; /* Row 1, Column 2 */
+}
+
+.bottom-left {
+  grid-area: 2 / 1 / 3 / 2; /* Row 2, Column 1 */
+}
+
+.bottom-right {
+  grid-area: 2 / 2 / 3 / 3; /* Row 2, Column 2 */
+}
+

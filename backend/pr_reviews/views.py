@@ -13,6 +13,7 @@ from .serializers import (
     PRReviewTableSerializer,
     PRReviewMeasureSerializer,
     MeasureCommentsSerializer,
+    DashboardDataSerializer
 )
 from key_measures.models import CapitalKeyMeasure, LiquidityKeyMeasure, InvestmentKeyMeasure, CreditKeyMeasure, AverageKeyMeasure
 from data.models import ScheduledFact
@@ -24,6 +25,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.timezone import now
+from django.db.models import Count, Q
 
 
 
@@ -636,3 +638,48 @@ def senior_supervisor_signoff(request, review_id):
     pr_review.save()
 
     return Response({'status': 'success', 'message': 'Senior Supervisor signed off.'})
+
+@api_view(['GET'])
+def get_dashboard_data(request):
+    # Step 1: Get the most recent 5 distinct reportingDates
+    recent_dates = (
+        ScheduledFact.objects
+        .order_by('-reportingDate')
+        .values_list('reportingDate', flat=True)
+        .distinct()[:5]
+    )
+
+    current_state = Q(state__id=1)
+    submitted_status = Q(status__id=2)
+
+    data = []
+    for date in recent_dates:
+        total_returns = ScheduledFact.objects.filter(current_state, reportingDate=date).count()
+        submitted_returns = ScheduledFact.objects.filter(current_state, submitted_status, reportingDate=date).count()
+
+        supervisor_signoffs = PRReviewTable.objects.filter(
+            returnId__reportingDate=date,
+            returnId__state__id=1,
+            returnId__status__id=2,
+            supervisor_so_by__isnull=False
+        ).count()
+
+        senior_supervisor_signoffs = PRReviewTable.objects.filter(
+            returnId__reportingDate=date,
+            returnId__state__id=1,
+            returnId__status__id=2,
+            senior_supervisor_so_by__isnull=False
+        ).count()
+
+        # Step 3: Create the data dictionary and append it to the list
+        data.append({
+            'reportingDate': date,
+            'total_returns': total_returns,
+            'submitted_returns': submitted_returns,
+            'supervisor_signoffs': supervisor_signoffs,
+            'senior_supervisor_signoffs': senior_supervisor_signoffs,
+        })
+
+    # Step 4: Serialize the data
+    serializer = DashboardDataSerializer(data, many=True)
+    return Response(serializer.data)
