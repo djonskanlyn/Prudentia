@@ -60,7 +60,7 @@ class PRReviewWithDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PRReviewTable
-        fields = ['id', 'returnId', 'firm', 'reportingDate', 'returnState', 'returnVersion', 'created_at', 'updated_at']
+        fields = ['id', 'returnId', 'firm', 'reportingDate', 'returnState', 'returnVersion', 'created_at', 'updated_at','supervisor_so_by','supervisor_so_at','senior_supervisor_so_by','senior_supervisor_so_at']
 
 class PRReviewTableSerializer(serializers.ModelSerializer):
     class Meta:

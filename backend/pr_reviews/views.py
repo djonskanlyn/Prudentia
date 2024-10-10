@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -19,6 +19,12 @@ from data.models import ScheduledFact
 from .models import PRReviewTable, PRReviewMeasure
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.timezone import now
+
 
 
 # Helper function to pivot a single model instance into long format
@@ -581,3 +587,52 @@ class PRReviewTableDetailView(RetrieveUpdateAPIView):
     def update(self, request, *args, **kwargs):
         kwargs['partial'] = True  # Allows partial updates
         return super().update(request, *args, **kwargs)
+    
+
+def is_in_supervisor_group(user):
+    return user.groups.filter(name='Supervisor').exists()
+
+# View for supervisor sign-off, requires JWT auth and group membership
+@csrf_exempt
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])  # JWT authentication required
+@user_passes_test(is_in_supervisor_group)  # Supervisor group required
+def supervisor_signoff(request, review_id):
+    pr_review = get_object_or_404(PRReviewTable, id=review_id)
+
+    # Ensure supervisor hasn't already signed off
+    if pr_review.supervisor_so_by:
+        return Response({'error': 'Supervisor sign-off already completed.'}, status=403)
+
+    pr_review.supervisor_so_by = request.user
+    pr_review.supervisor_so_at = now()
+    pr_review.save()
+
+    return Response({'status': 'success', 'message': 'Supervisor signed off.'})
+
+
+
+def is_in_senior_supervisor_group(user):
+    return user.groups.filter(name='Senior_Supervisor').exists()
+
+# View for senior supervisor sign-off, requires JWT auth and group membership
+@csrf_exempt
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])  # JWT authentication required
+@user_passes_test(is_in_senior_supervisor_group)  # Senior Supervisor group required
+def senior_supervisor_signoff(request, review_id):
+    pr_review = get_object_or_404(PRReviewTable, id=review_id)
+
+    # Ensure that the supervisor has signed off before the senior supervisor can
+    if not pr_review.supervisor_so_by:
+        return Response({'error': 'Supervisor must sign off first.'}, status=403)
+
+    # Ensure senior supervisor hasn't already signed off
+    if pr_review.senior_supervisor_so_by:
+        return Response({'error': 'Senior supervisor sign-off already completed.'}, status=403)
+
+    pr_review.senior_supervisor_so_by = request.user
+    pr_review.senior_supervisor_so_at = now()
+    pr_review.save()
+
+    return Response({'status': 'success', 'message': 'Senior Supervisor signed off.'})

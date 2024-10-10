@@ -1,5 +1,6 @@
 from django.db import models
 from key_measures.models import ScheduledFact
+from django.contrib.auth.models import User
 
 class PRReviewTable(models.Model):
     returnId = models.ForeignKey(ScheduledFact, on_delete=models.CASCADE, related_name='pr_reviews')
@@ -12,6 +13,12 @@ class PRReviewTable(models.Model):
     investments_comment = models.TextField(null=True, blank=True)
     credit_comment = models.TextField(null=True, blank=True)
     final_comment = models.TextField(null=True, blank=True)
+
+    # Sign-off fields
+    supervisor_so_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="supervisor_signoffs")  
+    supervisor_so_at = models.DateTimeField(null=True, blank=True)  # Supervisor sign-off date
+    senior_supervisor_so_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="senior_supervisor_signoffs")  
+    senior_supervisor_so_at = models.DateTimeField(null=True, blank=True)  # Senior Supervisor sign-off date
 
     def __str__(self):
         return f"PRReview for Return Id {self.returnId.id}"

@@ -26,11 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('PRUDENTIA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
-FRONTEND_URL = 'http://localhost:3000/'
-# FRONTEND_URL = 'https://prudentia.onrender.com/'
+# FRONTEND_URL = 'http://localhost:3000/'
+FRONTEND_URL = 'https://prudentia.onrender.com/'
 
 ALLOWED_HOSTS = [
     '127.0.0.1','localhost','prudentiaapi.onrender.com'
@@ -176,9 +176,10 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://localhost:3000',  # Add your React frontend URL here
-# ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000', 'https://prudentia.onrender.com'  # Add your React frontend URL here
+]
 
 # CSRF_COOKIE_HTTPONLY = False
 # CSRF_COOKIE_SECURE = False  # Only use True if you're using HTTPS
