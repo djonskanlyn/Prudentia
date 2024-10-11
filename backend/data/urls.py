@@ -8,7 +8,7 @@ from .views import (
     OutstandingLoanCategoryFactViewSet, AdvancedLoanCategoryFactViewSet,
     DepositsInvestmentsDimViewSet, CreditRiskDimViewSet,
     LoanMaturityDimViewSet, LoanCategoryDimViewSet,
-    ReturnsListView
+    ReturnsListView, get_aggregated_balance_sheet_data
 )
 
 router = DefaultRouter()
@@ -35,4 +35,5 @@ router.register(r'loan-category-dim', LoanCategoryDimViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('returns-list-view/', ReturnsListView.as_view(), name='returns-list-view'),
+    path('aggregated-balance-sheet/', get_aggregated_balance_sheet_data, name='aggregated-balance-sheet')
 ]

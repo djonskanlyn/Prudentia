@@ -105,3 +105,9 @@ class ReturnsListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'firm', 'firmName', 'templateName', 'reportingDate', 'quarterRef', 'dueDate', 'stateName', 'statusName', 'versionRef', 'firstSubmittedDatetime', 'lastSubmittedDatetime', 
         ]
+
+class BalanceSheetAggregatedDataSerializer(serializers.Serializer):
+    reportingDate = serializers.DateField(source='returnId__reportingDate')  # Correct the source
+    totalAssets = serializers.DecimalField(max_digits=15, decimal_places=0)
+    membersLoans = serializers.DecimalField(max_digits=15, decimal_places=0)
+    totalInvestments = serializers.DecimalField(max_digits=15, decimal_places=0)

@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import { useTheme } from '../components/ThemeContext';  // Import the ThemeContext hook
+import { fetchData } from '../components/FetchData';
 
 const DashboardTopLeftGrid = () => {
   const { isDarkTheme } = useTheme();  // Get the theme state from the context
+  const [chartData, setChartData] = useState([]);  // State to hold the API data
 
-  // Static sample data for bar chart (5 bars)
-  const chartData = [
-    { category: 'A', value: 10 },
-    { category: 'B', value: 20 },
-    { category: 'C', value: 30 },
-    { category: 'D', value: 40 },
-    { category: 'E', value: 50 },
-  ];
+  // Function to fetch the data from the API
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const data = await fetchData('data/aggregated-balance-sheet/');
+        
+        // Convert string numbers to actual numbers
+        const parsedData = data.map(item => ({
+          reportingDate: item.reportingDate,
+          totalAssets: parseFloat(item.totalAssets),
+          totalInvestments: parseFloat(item.totalInvestments),
+          membersLoans: parseFloat(item.membersLoans),
+        }));
+
+        setChartData(parsedData);  // Set the parsed data
+      } catch (err) {
+        setError('Failed to load data: ' + err.message);
+      }
+    };
+
+    fetchChartData();
+  }, []);
 
   // Define chart options with conditional theming based on the current theme
   const options = {
@@ -20,9 +36,10 @@ const DashboardTopLeftGrid = () => {
     series: [
       {
         type: 'bar',
-        xKey: 'category',
-        yKey: 'value',
-        yName: 'Value',
+        xKey: 'reportingDate',
+        yKey: 'totalAssets',
+        yName: 'Total Assets',
+        fill: '#598BAF',
       },
     ],
     axes: [
@@ -35,7 +52,7 @@ const DashboardTopLeftGrid = () => {
       {
         type: 'number',
         position: 'left',
-        title: { text: 'Value', color: isDarkTheme ? '#ffffff' : '#000000' },  // Adjust based on theme
+        title: { text: 'Amount in Millions', color: isDarkTheme ? '#ffffff' : '#000000' },  // Adjust based on theme
         label: { color: isDarkTheme ? '#ffffff' : '#000000' },  // Adjust text color
       },
     ],

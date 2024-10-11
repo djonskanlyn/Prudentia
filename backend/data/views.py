@@ -2,6 +2,8 @@ from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.db.models import Sum, F
+from rest_framework.decorators import api_view
 
 from .models import (
     FirmDim, TemplateDim, StatusDim, StateDim, ScheduledFact,
@@ -16,7 +18,7 @@ from .serializers import (
     CreditRiskFactSerializer, OutstandingLoanMaturityFactSerializer, AdvancedLoanMaturityFactSerializer,
     OutstandingLoanCategoryFactSerializer, AdvancedLoanCategoryFactSerializer, DepositsInvestmentsDimSerializer,
     LoanCategoryDimSerializer, LoanMaturityDimSerializer, CreditRiskDimSerializer,
-    ReturnsListSerializer
+    ReturnsListSerializer, BalanceSheetAggregatedDataSerializer
 )
 
 class FirmDimViewSet(viewsets.ModelViewSet):
@@ -248,6 +250,18 @@ class ReturnsListView(generics.ListAPIView):
     serializer_class = ReturnsListSerializer
 
 
+@api_view(['GET'])
+def get_aggregated_balance_sheet_data(request):
+    queryset = (
+        BalanceSheetFact.objects
+        .values('returnId__reportingDate')
+        .annotate(
+            totalAssets=Sum('totalAssets')/1000000,
+            membersLoans=Sum('membersLoans')/1000000,
+            totalInvestments=Sum(F('depositsInvestmentsCashEquivalents') + F('depositsInvestmentsOther'))/1000000
+        )
+        .order_by('returnId__reportingDate')
+    )
 
-
-
+    serializer = BalanceSheetAggregatedDataSerializer(queryset, many=True)
+    return Response(serializer.data)
