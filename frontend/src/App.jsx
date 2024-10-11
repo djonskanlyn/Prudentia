@@ -11,9 +11,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Register from './components/Register';
-import { ThemeProvider, useTheme } from './components/ThemeContext'; // Correctly import ThemeContext
+import { ThemeProvider, useTheme } from './components/ThemeContext';
 import ThemeToggleIcon from './components/ThemeToggleIcon';
-import NotFound from './components/NotFound'; // Custom 404 component
+import NotFound from './components/NotFound';
 
 import HomePage from './pages/HomePage';
 import ReturnsListPage from './pages/ReturnsListPage';

@@ -237,7 +237,7 @@ const InvestmentsKeyMeasuresGrid = () => {
     const fetchGridData = async () => {
       try {
         const data = await fetchData(`pr-reviews/pr-reviews-details/${reviewId}/`); // Fetch the data based on reviewId
-        const filteredData = data.filter(row => row.source === 'investment'); // Filter for 'capital' measures only
+        const filteredData = data.filter(row => row.source === 'investment'); // Filter for 'investment' measures only
         const sortedData = filteredData.sort((a, b) => a.id - b.id); 
         setRowData(sortedData); // Set the filtered data
       } catch (err) {

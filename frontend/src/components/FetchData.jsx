@@ -3,7 +3,6 @@ import axios from 'axios';
 // Create an axios instance with a base URL
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_PRUDENTIA_API_BASE_URL,
-  // baseURL: 'https://prudentiaapi.onrender.com/api/',
   // baseURL: 'http://localhost:8000/api/',
 });
 
@@ -62,7 +61,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Generic function to fetch data using the axios instance
+// Generic function to fetch data
 export const fetchData = async (url) => {
   try {
     const response = await apiClient.get(url);
@@ -75,7 +74,7 @@ export const fetchData = async (url) => {
 // Function to handle PUT requests
 export const updateData = async (url, data) => {
   try {
-    const response = await apiClient.put(url, data);  // Using axios PUT method
+    const response = await apiClient.put(url, data);
     return response.data;
   } catch (error) {
     throw new Error(error.message);

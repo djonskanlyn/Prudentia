@@ -18,7 +18,7 @@ const CapitalKeyMeasuresGrid = () => {
 
       console.log('Comment updated successfully', response);
     } catch (err) {
-      setError('Failed to update comment: ' + err.message); // Handle the error
+      setError('Failed to update comment: ' + err.message);
     }
   };
 

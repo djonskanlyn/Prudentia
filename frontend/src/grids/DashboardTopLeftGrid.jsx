@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AgCharts } from 'ag-charts-react';
-import { useTheme } from '../components/ThemeContext';  // Import the ThemeContext hook
+import { useTheme } from '../components/ThemeContext'; 
 import { fetchData } from '../components/FetchData';
 
 const DashboardTopLeftGrid = () => {

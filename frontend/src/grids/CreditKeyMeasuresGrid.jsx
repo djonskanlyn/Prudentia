@@ -237,7 +237,7 @@ const CreditKeyMeasuresGrid = () => {
     const fetchGridData = async () => {
       try {
         const data = await fetchData(`pr-reviews/pr-reviews-details/${reviewId}/`); // Fetch the data based on reviewId
-        const filteredData = data.filter(row => row.source === 'credit'); // Filter for 'capital' measures only
+        const filteredData = data.filter(row => row.source === 'credit'); // Filter for 'credit' measures only
         const sortedData = filteredData.sort((a, b) => a.id - b.id); 
         setRowData(sortedData); // Set the filtered data
       } catch (err) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaSun, FaMoon } from 'react-icons/fa';
-import { useTheme } from './ThemeContext'; // Import the useTheme hook to access the theme toggle function
+import { useTheme } from './ThemeContext';
 
 const ThemeToggleIcon = () => {
     const { isDarkTheme, toggleTheme } = useTheme();

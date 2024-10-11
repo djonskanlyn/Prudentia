@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchData, updateData } from '../components/FetchData'; // Import the functions from FetchData.jsx
+import { fetchData, updateData } from '../components/FetchData'; 
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../components/ThemeContext';
 
@@ -56,13 +56,13 @@ const PRCommentsSection = ({ commentType, label }) => {
         onChange={handleCommentChange}  // Automatically update when data changes
         rows="4"
         style={{
-          width: '100%',  // Full width of the container
+          width: '100%',
           padding: '10px',
           height: '150px',
           borderRadius: '10px',
           resize: 'vertical',
           borderColor: '#6E6E6E',
-          boxSizing: 'border-box',  // Include padding in the element's total width
+          boxSizing: 'border-box', 
         }}
       />
       </div>

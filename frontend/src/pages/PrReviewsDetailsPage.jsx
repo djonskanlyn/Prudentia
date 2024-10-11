@@ -18,7 +18,7 @@ const PrReviewsDetailsPage = () => {
   useEffect(() => {
     const fetchSignOffStatus = async () => {
       try {
-        // Fetch all PR reviews (assuming the API returns a list of reviews)
+        // Fetch all PR reviews
         const allData = await fetchData('/pr-reviews/pr-reviews-with-details/');
 
         // Filter the review based on the reviewId from the URL params

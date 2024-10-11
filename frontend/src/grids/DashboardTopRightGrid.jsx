@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { useTheme } from '../components/ThemeContext'; // Importing the theme context
+import { useTheme } from '../components/ThemeContext';
 import { fetchData } from '../components/FetchData';
 
 const DashboardTopRightGrid = () => {
-  const { themeClass } = useTheme(); // Access theme class from context
+  const { themeClass } = useTheme(); 
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
 

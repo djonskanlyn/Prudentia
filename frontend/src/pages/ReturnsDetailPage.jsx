@@ -63,7 +63,6 @@ const ReturnsDetailPage = () => {
       <div className="grid-page">
         <ReturnsFilter onSelectionChange={handleSelectionChange} />
         {error && <div>{error}</div>}
-        {/* {returnId && <p>Return ID: {returnId}</p>} */}
         <TabStructure />
       </div>
     </ReturnIdContext.Provider>
