@@ -181,8 +181,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000', 'https://prudentia.onrender.com'  # Add your React frontend URL here
 ]
 
-# CSRF_COOKIE_HTTPONLY = False
-# CSRF_COOKIE_SECURE = False  # Only use True if you're using HTTPS
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -201,8 +199,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),  # Access token expires in 5 minutes
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Refresh token expires in 7 days
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),  
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
 }
 
 # ===================

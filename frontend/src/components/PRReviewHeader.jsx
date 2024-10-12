@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchData } from '../components/FetchData';  // Utility for fetching data
+import { fetchData } from '../components/FetchData';
 
 const PRReviewHeader = () => {
   const { reviewId } = useParams();  // Get the reviewId from the URL
@@ -12,7 +12,7 @@ const PRReviewHeader = () => {
     // Fetch all review details and filter them by reviewId in the frontend
     const fetchReviewDetails = async () => {
       try {
-        // Fetch all review data from the endpoint (adjust the endpoint if necessary)
+        // Fetch all review data from the endpoint
         const data = await fetchData('pr-reviews/pr-reviews-with-details/');
 
         // Find the specific review by reviewId

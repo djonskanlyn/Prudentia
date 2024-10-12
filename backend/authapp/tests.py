@@ -115,7 +115,43 @@ class PasswordResetTestCase(TestCase):
         # Ensure password reset confirmation is successful
         self.assertEqual(reset_response.status_code, 200)
 
+class SwaggerAccessTests(TestCase):
+    def setUp(self):
+        # Create a normal user
+        self.user = User.objects.create_user(username='regular_user', password='testpass')
+        # Create a superuser
+        self.superuser = User.objects.create_superuser(username='admin', password='adminpass')
 
+    def test_non_superuser_cannot_access_swagger(self):
+        # Login as a non-superuser
+        self.client.login(username='regular_user', password='testpass')
+        response = self.client.get(reverse('schema-swagger-ui'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_superuser_can_access_swagger(self):
+        # Login as superuser
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('schema-swagger-ui'))
+        self.assertEqual(response.status_code, 200)
+
+class RedocAccessTests(TestCase):
+    def setUp(self):
+        # Create a normal user
+        self.user = User.objects.create_user(username='regular_user', password='testpass')
+        # Create a superuser
+        self.superuser = User.objects.create_superuser(username='admin', password='adminpass')
+
+    def test_non_superuser_cannot_access_redoc(self):
+        # Login as a non-superuser
+        self.client.login(username='regular_user', password='testpass')
+        response = self.client.get(reverse('schema-redoc'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_superuser_can_access_redoc(self):
+        # Login as superuser
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('schema-redoc'))
+        self.assertEqual(response.status_code, 200)
 
 
 
